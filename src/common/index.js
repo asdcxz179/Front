@@ -7,12 +7,29 @@ common.GetToken = function(){
   return localStorage.getItem('token');
 }
 
+common.SetToken = function($token){
+  return localStorage.setItem('token',$token);
+}
+
+common.RemoveToken = function(){
+  return localStorage.removeItem('token');
+}
+
 common.CheckLogin = function(){
-	axios.get('/api/v1/Check').then(function(response){
-		console.log(response);
-	}).catch(function(error){
-		console.log(error);
-	})
+	return new Promise(function(resolve,reject){
+		if(common.GetToken()==null){
+			reject(false);
+		}else{
+			axios.get('/api/v1/Check',{'headers':{'Authorization':'Bearer'}}).then((res)=>{
+				if(res.data.status=='error'){
+					// common.RemoveToken();
+					reject(false);
+				}else{
+					resolve(true);
+				}
+			});	
+		}
+	});
 }
 
 common.AxiosHandle = function (data){
@@ -24,6 +41,11 @@ common.AxiosHandle = function (data){
 			// swal_settings.title 	=	i18n.t('common').success;
 			swal_settings.icon 		=	'success';
 			swal_settings.html 		=	data.data.message;
+		break;
+		case 401:
+			swal_settings.icon 		=	data.data.status;
+			swal_settings.html 		=	data.data.message;
+			// alert(swal_settings.html);
 		break;
 		case 422:
 			// swal_settings.title 	=	i18n.t('common').warning;

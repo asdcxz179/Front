@@ -10,11 +10,12 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.prototype.$common = common;
 
-axios.interceptors.response.use(function (response) {
-	console.log(response);
-	return response;
-}, function (error) {
-	console.log(error);
+axios.interceptors.response.use(response=>{
+	console.log(response)
+	return response
+},error=>{
+	common.AxiosHandle(error.response)
+	return error.response
 });
 
 new Vue({

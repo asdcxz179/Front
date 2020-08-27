@@ -34,12 +34,17 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.name!=="Login" && common.GetToken() == null){
-    next({name:'Login'});
-  }else{
-    console.log(common.CheckLogin());
-    next();  
-  }
+  common.CheckLogin().then(()=>{
+    console.log('reslove')
+    next();
+  }).catch(()=>{
+    console.log('reject')
+    if(to.name!=="Login"){
+      next({name:'login'});
+    }else{
+      next();
+    }
+  });
 })
 
 export default router
