@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
   }).catch(()=>{
     console.log('reject')
     if(to.name!=="Login"){
-      next({name:'login'});
+      next({path:'login'});
     }else{
       next();
     }
