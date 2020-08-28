@@ -1,5 +1,10 @@
 
+import Vue from 'vue'
 import axios from 'axios'
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+Vue.use(VueSweetalert2)
 
 const common = {};
 
@@ -57,7 +62,6 @@ common.AxiosHandle = function (data){
 		case 401:
 			swal_settings.icon 		=	data.data.status;
 			swal_settings.html 		=	data.data.message;
-			// alert(swal_settings.html);
 		break;
 		case 422:
 			console.log(422);
@@ -76,7 +80,7 @@ common.AxiosHandle = function (data){
 			// swal_settings.html 		=	i18n.t('common.undefind-error')+':'+data.status;
 		break;
 	}
-	// Vue.swal(swal_settings);
+	Vue.swal(swal_settings);
 }
 
 export default common

@@ -6,7 +6,10 @@ import store from './store'
 import firebase from './firebase'
 import common from './common/index'
 import axios from 'axios'
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
+Vue.use(VueSweetalert2);
 Vue.config.productionTip = false
 Vue.prototype.$common = common;
 Vue.prototype.$axios = axios;
