@@ -9,9 +9,14 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 Vue.prototype.$common = common;
+Vue.prototype.$axios = axios;
+
+axios.interceptors.request.use(function(config){
+  config.headers.authorization = "Bearer "+common.GetToken();
+  return config;
+})
 
 axios.interceptors.response.use(response=>{
-	console.log(response)
 	return response
 },error=>{
 	common.AxiosHandle(error.response)

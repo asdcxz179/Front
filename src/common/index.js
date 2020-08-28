@@ -20,9 +20,9 @@ common.CheckLogin = function(){
 		if(common.GetToken()==null){
 			reject(false);
 		}else{
-			axios.get('/api/v1/Check',{'headers':{'Authorization':'Bearer'}}).then((res)=>{
+			axios.get('/api/v1/Check').then((res)=>{
 				if(res.data.status=='error'){
-					// common.RemoveToken();
+					common.RemoveToken();
 					reject(false);
 				}else{
 					resolve(true);
@@ -30,6 +30,18 @@ common.CheckLogin = function(){
 			});	
 		}
 	});
+}
+
+common.Captcha 	=	function(){
+	return new Promise(function(resolve,reject){
+		axios.get('/api/v1/Captcha').then((res)=>{
+			if(res.data.status=='error'){
+				reject(res.data);
+			}else{
+				resolve(res.data.message);
+			}
+		});	
+	})
 }
 
 common.AxiosHandle = function (data){
@@ -48,6 +60,7 @@ common.AxiosHandle = function (data){
 			// alert(swal_settings.html);
 		break;
 		case 422:
+			console.log(422);
 			// swal_settings.title 	=	i18n.t('common').warning;
 			swal_settings.icon 		=	'warning';
 			swal_settings.html 		=	data.data.message;

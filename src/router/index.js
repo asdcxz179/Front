@@ -35,10 +35,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   common.CheckLogin().then(()=>{
-    console.log('reslove')
-    next();
+    if(to.name!=="Login"){
+      next();  
+    }else{
+      next({path:'/'});
+    }
   }).catch(()=>{
-    console.log('reject')
     if(to.name!=="Login"){
       next({path:'login'});
     }else{

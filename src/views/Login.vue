@@ -19,13 +19,15 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form>
-                                    <v-text-field label="Login" name="login" prepend-icon="mdi-account" type="text"></v-text-field>
-                                    <v-text-field id="password" label="Password" name="password" prepend-icon="mdi-lock" type="password"></v-text-field>
+                                    <v-text-field label="Login" v-model="LoginForm.username" prepend-icon="mdi-account" type="text"></v-text-field>
+                                    <v-text-field id="password" v-model="LoginForm.password" label="Password" prepend-icon="mdi-lock" type="password"></v-text-field>
+                                    <v-text-field id="captcha" v-model="LoginForm.captcha" label="Captcha" prepend-icon="mdi-lock" type="text"></v-text-field>
+                                    <v-img :src="captcha"></v-img>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary">Login</v-btn>
+                                <v-btn color="primary" v-on:click="this.login">Login</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -39,7 +41,30 @@
         data () {
             return {
                 alert: true,
+                source:"#",
+                captcha:"",
+                LoginForm:{
+                    username:"",
+                    password:"",
+                    captcha:"",
+                    captcha_key:"",
+                }
             }
         },
+        created:function(){
+            this.$common.Captcha().then(data=>{
+                this.captcha    =   data.img;
+                this.LoginForm.captcha_key        =   data.key;
+            });
+        },
+        methods:{
+            login(){
+                this.$axios.post('/api/v1/Login',this.LoginForm).then((res)=>{
+                    if(res.data.status=='success'){
+                        this.$common.SetToken(res.data.data.token);
+                    }
+                });
+            }
+        }
     }
 </script>
