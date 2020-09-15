@@ -32,6 +32,7 @@
                         </v-card>
                     </v-col>
                 </v-row>
+                <v-language></v-language>
             </v-container>
         </v-main>
     </v-app>
@@ -65,6 +66,6 @@
                     }
                 });
             }
-        }
+        },
     }
 </script>

@@ -4,12 +4,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+	state: {
+		language:'en'
+	},
+	mutations: {
+		setLanguage (statue,lang){
+			statue.language = lang;
+		}
+	},
+	actions: {
+		setLanguage (context,lang){
+			context.commit('setLanguage',lang);
+		}
+	},
+	modules: {
+	}
 })
