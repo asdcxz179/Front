@@ -1,7 +1,7 @@
 <template>
 	<v-select
 		:items="items"
-		v-model="selLang"
+		v-model="Lang"
 	></v-select>
 </template>
 <script>
@@ -10,11 +10,6 @@
 			items:['en','zhHant'],
 			selLang: 'en',
 		}),
-		watch: {
-			selLang: function (lang) {
-				this.setLang(lang);
-			}
-		},
 		methods:{
 			setLang(lang){
 				this.$store.commit('setLanguage',lang);
@@ -49,5 +44,16 @@
 			}
 			this.loadLanguageAsync();
 		},
+		computed:{
+			Lang:{
+				get(){
+					return this.$store.state.language;
+				},
+				set(newLang){
+					this.$store.commit('setLanguage',newLang);
+					this.loadLanguageAsync();
+				}
+			}
+		}
 	}
 </script>
