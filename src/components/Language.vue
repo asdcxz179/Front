@@ -1,14 +1,26 @@
 <template>
-	<v-select
-		:items="items"
-		v-model="Lang"
-	></v-select>
+	<v-row>
+		<v-col >
+			<v-select
+				:items="items"
+				v-model="Lang"
+			></v-select>
+		</v-col>
+	</v-row>
 </template>
 <script>
 	export default {
 		data: () => ({
-			items:['en','zhHant'],
-			selLang: 'en',
+			items:[
+				{
+					text:'English',
+					value:'en',
+				},
+				{
+					text:'繁體中文',
+					value:'zhHant',
+				},
+			],
 		}),
 		methods:{
 			setLang(lang){
@@ -34,13 +46,13 @@
 		created:function(){
             var lang = this.$cookies.get('lang');
 			if(lang){
-				this.selLang 	=	lang;
+				this.$store.commit('setLanguage',lang);
 			}
         },
         mounted:function(){
 			var lang = this.$cookies.get('lang');
 			if(lang){
-				this.selLang 	=	lang;
+				this.$store.commit('setLanguage',lang);
 			}
 			this.loadLanguageAsync();
 		},
