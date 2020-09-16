@@ -11,10 +11,13 @@
 		"undefind-error":"未知的錯誤",
 		"warning":"警告",
 		"success":"成功",
-		"error":"錯誤"
+		"error":"錯誤",
+		"language_system":"語系"
 	},
 	"login-page":{
-		"title":"會員登入"
+		"title":"會員登入",
+		"login":"登入",
+		"login-form-title":"管理後台"
 	},
 	"register-page":{
 		"title":"會員註冊"

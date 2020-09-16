@@ -5,34 +5,36 @@
                 <v-row align="center" justify="center">
                     <v-col cols="12" sm="8" md="4">
                         <v-card class="elevation-12">
-                            <v-toolbar color="primary" dark flat>
-                                <v-toolbar-title>Login form</v-toolbar-title>
-                                <v-spacer></v-spacer>
-                                <v-tooltip bottom>
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn :href="source" icon large target="_blank" v-on="on">
-                                            <v-icon>mdi-code-tags</v-icon>
-                                        </v-btn>
-                                    </template>
-                                    <span>Source</span>
-                                </v-tooltip>
+                            <v-toolbar
+                                color="primary"
+                                dark
+                                flat
+                                align="center"
+                            >
+                                <v-toolbar-title>{{$t('login-page.login-form-title')}}</v-toolbar-title>
                             </v-toolbar>
                             <v-card-text>
                                 <v-form>
                                     <v-text-field label="Login" v-model="LoginForm.username" prepend-icon="mdi-account" type="text"></v-text-field>
                                     <v-text-field id="password" v-model="LoginForm.password" label="Password" prepend-icon="mdi-lock" type="password"></v-text-field>
-                                    <v-text-field id="captcha" v-model="LoginForm.captcha" label="Captcha" prepend-icon="mdi-lock" type="text"></v-text-field>
-                                    <v-img :src="captcha"></v-img>
+                                    <v-row>
+                                        <v-col cols="6" md="6">
+                                            <v-text-field id="captcha" v-model="LoginForm.captcha" label="Captcha" prepend-icon="fa-door-open" type="text"></v-text-field>
+                                        </v-col>
+                                        <v-col col="6" md="6">
+                                            <v-img :src="captcha"></v-img>
+                                        </v-col>
+                                    </v-row>
+                                    <v-language></v-language>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="primary" v-on:click="this.login">Login</v-btn>
+                                <v-btn color="primary" v-on:click="this.login">{{$t('login-page.login')}}</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-col>
                 </v-row>
-                <v-language></v-language>
             </v-container>
         </v-main>
     </v-app>
