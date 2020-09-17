@@ -21,5 +21,12 @@
 	},
 	"register-page":{
 		"title":"會員註冊"
+	},
+	"menu":{
+		"site_settings":"網站設定",
+		"dashboard":"儀錶板",
+		"system_settings":"系統設定",
+		"manager_system":"網站管理員",
+		"managers":"管理員"
 	}
 }

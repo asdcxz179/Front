@@ -24,7 +24,17 @@ Vue.use(VueRouter)
         path: 'Dashboard',
         name: 'Dashboard',
         component: () => import('../views/Dashboard.vue')
-      }
+      },
+      {
+        path: 'Settings',
+        name: 'Settings',
+        component: () => import('../views/Settings.vue')
+      },
+      {
+        path: 'Managers',
+        name: 'Managers',
+        component: () => import('../views/Managers.vue')
+      },
     ]
   }
 ]

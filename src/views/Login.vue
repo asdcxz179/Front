@@ -25,12 +25,18 @@
                                             <v-img :src="captcha"></v-img>
                                         </v-col>
                                     </v-row>
-                                    <v-language></v-language>
+                                    
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="primary" v-on:click="this.login">{{$t('login-page.login')}}</v-btn>
+                                <v-row jus>
+                                    <v-col col="12" md="6">
+                                        <v-language></v-language>
+                                    </v-col>
+                                    <v-col col="12" md="6">
+                                        <v-btn color="primary" v-on:click="this.login">{{$t('login-page.login')}}</v-btn>
+                                    </v-col>
+                                </v-row>
                             </v-card-actions>
                         </v-card>
                     </v-col>
@@ -65,6 +71,7 @@
                 this.$axios.post('/api/v1/Login',this.LoginForm).then((res)=>{
                     if(res.data.status=='success'){
                         this.$common.SetToken(res.data.data.token);
+                        this.$router.push('Admin');
                     }
                 });
             }

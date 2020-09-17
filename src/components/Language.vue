@@ -1,12 +1,10 @@
 <template>
-	<v-row>
-		<v-col >
-			<v-select
-				:items="items"
-				v-model="Lang"
-			></v-select>
-		</v-col>
-	</v-row>
+	<v-select
+		:items="items"
+		v-model="Lang"
+		prepend-icon="fa-language"
+		outlined
+	></v-select>
 </template>
 <script>
 	export default {

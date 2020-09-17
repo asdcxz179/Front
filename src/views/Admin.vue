@@ -44,6 +44,7 @@
             <v-list-item
               v-for="(child, i) in item.children"
               :key="i"
+              :to="{name:child.link}"
               link
             >
               <v-list-item-action v-if="child.icon">
@@ -59,6 +60,7 @@
           <v-list-item
             v-else
             :key="item.text"
+            :to="{name:item.link}"
             link
           >
             <v-list-item-action>
@@ -85,18 +87,22 @@
         style="width: 300px"
         class="ml-0 pl-4"
       >
-        <span class="hidden-sm-and-down">Google Contacts</span>
+        <span class="hidden-sm-and-down">{{$t('login-page.login-form-title')}}</span>
       </v-toolbar-title>
-      <v-text-field
+      <!-- <v-text-field
         flat
         solo-inverted
         hide-details
         prepend-inner-icon="mdi-magnify"
         label="Search"
         class="hidden-sm-and-down"
-      ></v-text-field>
+      ></v-text-field> -->
       <v-spacer></v-spacer>
-      <v-btn icon>
+      <v-language></v-language>
+      <v-btn icon v-on:click="this.logout">
+        <v-icon>fa-sign-out-alt</v-icon>
+      </v-btn>
+      <!-- <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
       <v-btn icon>
@@ -114,7 +120,7 @@
             src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
             alt="Vuetify"
           ></v-img></v-avatar>
-      </v-btn>
+      </v-btn> -->
     </v-app-bar>
     <v-main>
       <router-view></router-view>
@@ -131,37 +137,30 @@
       dialog: false,
       drawer: null,
       items: [
-        { icon: 'mdi-contacts', text: 'Contacts' },
-        { icon: 'mdi-history', text: 'Frequently contacted' },
-        { icon: 'mdi-content-copy', text: 'Duplicates' },
-        {
-          icon: 'mdi-chevron-up',
-          'icon-alt': 'mdi-chevron-down',
-          text: 'Labels',
-          model: true,
-          children: [
-            { icon: 'mdi-plus', text: 'Create label' },
-          ],
-        },
-        {
-          icon: 'mdi-chevron-up',
-          'icon-alt': 'mdi-chevron-down',
-          text: 'More',
-          model: false,
-          children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' },
-          ],
-        },
-        { icon: 'mdi-cog', text: 'Settings' },
-        { icon: 'mdi-message', text: 'Send feedback' },
-        { icon: 'mdi-help-circle', text: 'Help' },
-        { icon: 'mdi-cellphone-link', text: 'App downloads' },
-        { icon: 'mdi-keyboard', text: 'Go to the old version' },
       ],
     }),
+    created:function(){
+      this.$axios.get('/api/v1/Route').then((res)=>{
+        for(var data in res.data.data){
+          res.data.data[data].text  = this.$i18n.t('menu.'+res.data.data[data].text);
+          if(res.data.data[data].children){
+            for(var child in res.data.data[data].children){
+              res.data.data[data].children[child].text  = this.$i18n.t('menu.'+res.data.data[data].children[child].text);
+            }
+          }
+        }
+        this.items  = res.data.data
+      });
+    },
+    methods:{
+      logout(){
+        this.$axios.get('/api/v1/Logout').then((res)=>{
+            if(res.data.status=='success'){
+                location.reload();
+                this.$common.RemoveToken();
+            }
+        });
+      }
+    }
   }
 </script>

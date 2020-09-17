@@ -24,7 +24,7 @@ axios.interceptors.request.use(function(config){
   return config;
 })
 
-axios.interceptors.response.use(response=>{
+axios.interceptors.response.use(response=>{ 
 	return response
 },error=>{
 	common.AxiosHandle(error.response)
