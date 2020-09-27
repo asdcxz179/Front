@@ -14,7 +14,8 @@
 		"error":"錯誤",
 		"language_system":"語系",
 		"no":"序",
-		"created_at":"建立時間"
+		"created_at":"建立時間",
+		"captcha":"驗證碼"
 	},
 	"login-page":{
 		"title":"會員登入",

@@ -15,11 +15,11 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form>
-                                    <v-text-field label="Login" v-model="LoginForm.username" prepend-icon="mdi-account" type="text"></v-text-field>
-                                    <v-text-field id="password" v-model="LoginForm.password" label="Password" prepend-icon="mdi-lock" type="password"></v-text-field>
+                                    <v-text-field v-bind:label="$t('common.account')" v-model="LoginForm.username" prepend-icon="mdi-account" type="text"></v-text-field>
+                                    <v-text-field id="password" v-model="LoginForm.password" v-bind:label="$t('common.password')" prepend-icon="mdi-lock" type="password"></v-text-field>
                                     <v-row>
                                         <v-col cols="6" md="6">
-                                            <v-text-field id="captcha" v-model="LoginForm.captcha" label="Captcha" prepend-icon="fa-door-open" type="text"></v-text-field>
+                                            <v-text-field id="captcha" v-model="LoginForm.captcha" v-bind:label="$t('common.captcha')" prepend-icon="fa-door-open" type="text"></v-text-field>
                                         </v-col>
                                         <v-col col="6" md="6">
                                             <v-img :src="captcha"></v-img>
