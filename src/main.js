@@ -8,6 +8,7 @@ import axios from 'axios'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Language from './components/Language.vue';
+import Password from './components/Password.vue';
 import VueCookies from 'vue-cookies'
 import VueI18n from 'vue-i18n'
 
@@ -32,6 +33,7 @@ axios.interceptors.response.use(response=>{
 });
 
 Vue.component('v-language',Language);
+Vue.component('v-password',Password);
 
 new Vue({
   vuetify,

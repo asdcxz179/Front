@@ -99,10 +99,11 @@
       ></v-text-field> -->
       <v-spacer></v-spacer>
       <v-language></v-language>
+      <v-password></v-password>
       <v-btn icon v-on:click="this.logout">
         <v-icon>fa-sign-out-alt</v-icon>
       </v-btn>
-      <!-- <v-btn icon>
+     <!--  <v-btn icon>
         <v-icon>mdi-apps</v-icon>
       </v-btn>
       <v-btn icon>
@@ -127,7 +128,14 @@
     </v-main>
   </v-app>
 </template>
-
+<style scoped>
+  .admin-language >>> input{
+    width: 0px;
+  }
+  .admin-language >>> .v-select__selection{
+    max-width:100%;
+  }
+</style>
 <script>
   export default {
     props: {
@@ -158,6 +166,7 @@
             if(res.data.status=='success'){
                 location.reload();
                 this.$common.RemoveToken();
+                this.$common.RemoveUuid();
             }
         });
       }

@@ -71,6 +71,7 @@
                 this.$axios.post('/api/v1/Login',this.LoginForm).then((res)=>{
                     if(res.data.status=='success'){
                         this.$common.SetToken(res.data.data.token);
+                        this.$common.SetUuid(res.data.data.uuid);
                         this.$router.push('Admin');
                     }
                 });

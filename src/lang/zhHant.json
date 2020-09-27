@@ -15,7 +15,12 @@
 		"language_system":"語系",
 		"no":"序",
 		"created_at":"建立時間",
-		"captcha":"驗證碼"
+		"captcha":"驗證碼",
+		"close":"關閉",
+		"confirm":"確認"
+	},
+	"admin":{
+		"change_password":"變更密碼"
 	},
 	"login-page":{
 		"title":"會員登入",

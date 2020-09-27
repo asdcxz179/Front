@@ -25,6 +25,18 @@ common.RemoveToken = function(){
   return localStorage.removeItem('token');
 }
 
+common.GetUuid = function(){
+  return localStorage.getItem('uuid');
+}
+
+common.SetUuid = function($uuid){
+  return localStorage.setItem('uuid',$uuid);
+}
+
+common.RemoveUuid = function(){
+  return localStorage.removeItem('uuid');
+}
+
 common.CheckLogin = function(){
 	return new Promise(function(resolve,reject){
 		if(common.GetToken()==null){
@@ -33,6 +45,7 @@ common.CheckLogin = function(){
 			axios.get('/api/v1/Check').then((res)=>{
 				if(res.data.status=='error'){
 					common.RemoveToken();
+					common.RemoveUuid();
 					reject(false);
 				}else{
 					resolve(true);
