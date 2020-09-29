@@ -13,27 +13,27 @@
 					<span>{{$t('admin.change_password')}}</span>
 				</v-tooltip>
 			</template>
-			<v-card>
-				<v-card-title>
-					<span class="headline">{{$t('admin.change_password')}}</span>
-				</v-card-title>
-				<v-card-text>
-					<v-container>
-						<v-form ref="password_form">
+			<v-form @submit="this.change" ref="password_form">
+				<v-card>
+					<v-card-title>
+						<span class="headline">{{$t('admin.change_password')}}</span>
+					</v-card-title>
+					<v-card-text>
+						<v-container>
 							<v-row>
 								<v-col cols="12">
 									<v-text-field v-bind:label="$t('common.password')" type="password" required v-model="PasswordForm.password"></v-text-field>
 								</v-col>
 							</v-row>
-						</v-form>
-					</v-container>
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<v-btn color="blue darken-1" text @click="password_dialog = false">{{$t('common.close')}}</v-btn>
-					<v-btn color="blue darken-1" text v-on:click="this.change">{{$t('common.confirm')}}</v-btn>
-				</v-card-actions>
-			</v-card>
+						</v-container>
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn color="blue darken-1" text @click="password_dialog = false">{{$t('common.close')}}</v-btn>
+						<v-btn color="blue darken-1" text type="submit">{{$t('common.confirm')}}</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-form>
 		</v-dialog>
 	</div>
 </template>
