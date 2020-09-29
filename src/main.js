@@ -41,5 +41,39 @@ new Vue({
   store,
   axios,
   i18n,
-  render: h => h(App)
+  render: h => h(App),
+  methods:{
+    setLang(lang){
+      this.$store.commit('setLanguage',lang);
+      this.loadLanguageAsync();
+    },
+    loadLanguageAsync:function(){
+      return import(`./lang/${this.$store.state.language}.json`).then(msgs => {
+        this.$i18n.setLocaleMessage(this.$store.state.language, msgs.default);
+        this.$common.i18n.setLocaleMessage(this.$store.state.language, msgs.default);
+        return this.setI18nLanguage();
+      });
+    },
+    setI18nLanguage:function(){
+      this.$i18n.locale = this.$store.state.language;
+      this.$common.i18n.locale = this.$store.state.language;
+      this.$vuetify.lang  = {t: (key, ...params) => this.$i18n.t(key, params)};
+      this.$cookies.set('lang',this.$i18n.locale);
+      document.querySelector('html').setAttribute('lang', this.$i18n.locale);
+      return this.$i18n.locale;
+    }
+  },
+  created:function(){
+    var lang = this.$cookies.get('lang');
+    if(lang){
+      this.$store.commit('setLanguage',lang);
+    }
+      },
+      mounted:function(){
+    var lang = this.$cookies.get('lang');
+    if(lang){
+      this.$store.commit('setLanguage',lang);
+    }
+    this.loadLanguageAsync();
+  }
 }).$mount('#app')
