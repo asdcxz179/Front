@@ -17,7 +17,8 @@
 		"created_at":"建立時間",
 		"captcha":"驗證碼",
 		"close":"關閉",
-		"confirm":"確認"
+		"confirm":"確認",
+		"loading":"資料加載中..."
 	},
 	"admin":{
 		"change_password":"變更密碼"
