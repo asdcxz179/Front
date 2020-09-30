@@ -11,6 +11,9 @@ import Language from './components/Language.vue';
 import Password from './components/Password.vue';
 import VueCookies from 'vue-cookies'
 import VueI18n from 'vue-i18n'
+import { localize } from 'vee-validate';
+// import { required, email, max } from 'vee-validate/dist/rules'
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 
 const i18n = new VueI18n();
 
@@ -34,6 +37,10 @@ axios.interceptors.response.use(response=>{
 
 Vue.component('v-language',Language);
 Vue.component('v-password',Password);
+Vue.component('ValidationProvider',ValidationProvider);
+Vue.component('ValidationObserver',ValidationObserver);
+
+
 
 new Vue({
   vuetify,
@@ -51,6 +58,7 @@ new Vue({
       return import(`./lang/${this.$store.state.language}.json`).then(msgs => {
         this.$i18n.setLocaleMessage(this.$store.state.language, msgs.default);
         this.$common.i18n.setLocaleMessage(this.$store.state.language, msgs.default);
+        localize(this.$store.state.language,msgs.default);
         return this.setI18nLanguage();
       });
     },
