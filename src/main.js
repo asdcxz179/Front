@@ -12,8 +12,8 @@ import Password from './components/Password.vue';
 import VueCookies from 'vue-cookies'
 import VueI18n from 'vue-i18n'
 import { localize } from 'vee-validate';
-// import { required, email, max } from 'vee-validate/dist/rules'
-import { ValidationObserver, ValidationProvider } from 'vee-validate'
+import { required, email, max, min, alpha,alpha_num } from 'vee-validate/dist/rules'
+import { extend,ValidationObserver, ValidationProvider } from 'vee-validate'
 
 const i18n = new VueI18n();
 
@@ -40,7 +40,12 @@ Vue.component('v-password',Password);
 Vue.component('ValidationProvider',ValidationProvider);
 Vue.component('ValidationObserver',ValidationObserver);
 
-
+extend('required',required);
+extend('email',email);
+extend('max',max);
+extend('min',min);
+extend('alpha',alpha);
+extend('alpha_num',alpha_num);
 
 new Vue({
   vuetify,
@@ -49,18 +54,35 @@ new Vue({
   axios,
   i18n,
   render: h => h(App),
+  data:{
+    i18n_trans:{
+      'zhHant':'zh_TW',
+      'zhHans':'zh_CN'
+    }
+  },
   methods:{
     setLang(lang){
       this.$store.commit('setLanguage',lang);
       this.loadLanguageAsync();
     },
     loadLanguageAsync:function(){
+      
       return import(`./lang/${this.$store.state.language}.json`).then(msgs => {
         this.$i18n.setLocaleMessage(this.$store.state.language, msgs.default);
         this.$common.i18n.setLocaleMessage(this.$store.state.language, msgs.default);
-        localize(this.$store.state.language,msgs.default);
-        return this.setI18nLanguage();
+        this.setI18nLanguage();
+        this.loadVeeLanguage();
+        return true;
       });
+    },
+    loadVeeLanguage:function(){
+      var lang  = this.i18n_trans[this.$store.state.language];
+      if(lang===undefined){
+        lang =  this.$store.state.language;
+      }
+      return import(`vee-validate/dist/locale/${lang}.json`).then(msgs => {
+        localize(this.$store.state.language,msgs.default);
+      })
     },
     setI18nLanguage:function(){
       this.$i18n.locale = this.$store.state.language;

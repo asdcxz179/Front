@@ -18,7 +18,7 @@
                                         <v-toolbar-title>{{$t('login-page.login-form-title')}}</v-toolbar-title>
                                     </v-toolbar>
                                     <v-card-text>
-                                        <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.account')" rules="required|max:10">
+                                        <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.account')" rules="required|min:6|max:12">
                                             <v-text-field 
                                                 v-bind:label="$t('common.account')" 
                                                 v-model="LoginForm.username" 
@@ -27,10 +27,28 @@
                                                 :error-messages="errors"
                                             ></v-text-field>
                                         </ValidationProvider>
-                                            <v-text-field id="password" v-model="LoginForm.password" v-bind:label="$t('common.password')" prepend-icon="mdi-lock" type="password"></v-text-field>
+                                        <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.password')" rules="required|min:6|max:12">
+                                            <v-text-field 
+                                                id="password" 
+                                                v-model="LoginForm.password" 
+                                                v-bind:label="$t('common.password')" 
+                                                prepend-icon="mdi-lock" 
+                                                type="password"
+                                                :error-messages="errors"
+                                            ></v-text-field>
+                                        </ValidationProvider>
                                             <v-row>
                                                 <v-col cols="6" md="6">
-                                                    <v-text-field id="captcha" v-model="LoginForm.captcha" v-bind:label="$t('common.captcha')" prepend-icon="fa-door-open" type="text"></v-text-field>
+                                                    <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.captcha')" rules="required|alpha_num">
+                                                        <v-text-field 
+                                                        id="captcha" 
+                                                        v-model="LoginForm.captcha" 
+                                                        v-bind:label="$t('common.captcha')" 
+                                                        prepend-icon="fa-door-open" 
+                                                        type="text"
+                                                        :error-messages="errors"
+                                                    ></v-text-field>
+                                                    </ValidationProvider>
                                                 </v-col>
                                                 <v-col col="6" md="6">
                                                     <v-img class="captcha" :src="captcha" v-on:click="this.GetCaptcha"></v-img>
@@ -85,13 +103,17 @@
         },
         methods:{
             login(){
-                this.$axios.post('/api/v1/Login',this.LoginForm).then((res)=>{
-                    if(res.data.status=='success'){
-                        this.$common.SetToken(res.data.data.token);
-                        this.$common.SetUuid(res.data.data.uuid);
-                        this.$router.push('Admin');
+                this.$refs.observer.validate().then(result => {
+                    if(result){
+                        this.$axios.post('/api/v1/Login',this.LoginForm).then((res)=>{
+                            if(res.data.status=='success'){
+                                this.$common.SetToken(res.data.data.token);
+                                this.$common.SetUuid(res.data.data.uuid);
+                                this.$router.push('Admin');
+                            }
+                        });    
                     }
-                });
+                })
             },
             GetCaptcha(){
                 this.$common.Captcha().then(data=>{
