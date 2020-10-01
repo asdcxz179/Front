@@ -13,27 +13,37 @@
 					<span>{{$t('admin.change_password')}}</span>
 				</v-tooltip>
 			</template>
-			<v-form @submit="this.change" ref="password_form">
-				<v-card>
-					<v-card-title>
-						<span class="headline">{{$t('admin.change_password')}}</span>
-					</v-card-title>
-					<v-card-text>
-						<v-container>
-							<v-row>
-								<v-col cols="12">
-									<v-text-field v-bind:label="$t('common.password')" type="password" required v-model="PasswordForm.password"></v-text-field>
-								</v-col>
-							</v-row>
-						</v-container>
-					</v-card-text>
-					<v-card-actions>
-						<v-spacer></v-spacer>
-						<v-btn color="blue darken-1" text @click="password_dialog = false">{{$t('common.close')}}</v-btn>
-						<v-btn color="blue darken-1" text type="submit">{{$t('common.confirm')}}</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-form>
+			<ValidationObserver ref="observer" >
+				<v-form @submit="this.change" ref="password_form">
+					<v-card>
+						<v-card-title>
+							<span class="headline">{{$t('admin.change_password')}}</span>
+						</v-card-title>
+						<v-card-text>
+							<v-container>
+								<v-row>
+									<v-col cols="12">
+										<ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.password')" rules="required|min:6|max:12">
+											<v-text-field 
+												v-bind:label="$t('common.password')" 
+												type="password" 
+												required 
+												v-model="PasswordForm.password"
+												:error-messages="errors"
+											></v-text-field>
+										</ValidationProvider>
+									</v-col>
+								</v-row>
+							</v-container>
+						</v-card-text>
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn color="blue darken-1" text @click="password_dialog = false">{{$t('common.close')}}</v-btn>
+							<v-btn color="blue darken-1" text type="submit">{{$t('common.confirm')}}</v-btn>
+						</v-card-actions>
+					</v-card>
+				</v-form>
+			</ValidationObserver>
 		</v-dialog>
 	</div>
 </template>
@@ -62,14 +72,17 @@
 		}),
 		methods:{
 			change(){
-				this.$axios.put('/api/v1/ChangePassword/'+this.$common.GetUuid(),this.PasswordForm).then((res)=>{
-					if(res.data.status=='success'){
-						this.$common.AxiosHandle(res);
-						this.password_dialog	=	false;
-						this.$refs.password_form.reset()
-					}
-				});
-				
+				this.$refs.observer.validate().then(result => {
+                    if(result){
+                        this.$axios.put('/api/v1/ChangePassword/'+this.$common.GetUuid(),this.PasswordForm).then((res)=>{
+							if(res.data.status=='success'){
+								this.$common.AxiosHandle(res);
+								this.password_dialog	=	false;
+								this.$refs.password_form.reset()
+							}
+						});
+                    }
+                })
 			}
 		},
 	}

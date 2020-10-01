@@ -16,7 +16,10 @@
           :items="desserts"
           :items-per-page="10"
           class="elevation-1"
-          :loading="loading" v-bind:loading-text="$t('common.loading')"
+          :loading="loading" 
+          v-bind:loading-text="$t('common.loading')"
+          :server-items-length="totalDesserts"
+          :options.sync="options"
         ></v-data-table>
       </v-col>
     </v-row>
@@ -29,7 +32,9 @@
       return {
         loading:true,
         totalDesserts:0,
-        options:{},
+        options:{
+          page:""
+        },
         headers: [
           {
             text: this.$i18n.t('common.no'),
@@ -51,9 +56,12 @@
     },
     methods:{
       GetManager(){
+        console.log(this.options.page);
+        // const { sortBy, sortDesc, page, itemsPerPage } = this.options;
         this.$axios.get('/api/v1/Manager').then((res)=>{
           if(res.data.status=='success'){
-            this.desserts   = res.data.data.original.data;
+            this.desserts   = res.data.data.data;
+            this.totalDesserts  = res.data.data.total;
           }
           this.loading  = false;
         });
