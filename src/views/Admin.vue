@@ -148,19 +148,28 @@
       ],
     }),
     created:function(){
-      this.$axios.get('/api/v1/Route').then((res)=>{
-        for(var data in res.data.data){
-          res.data.data[data].text  = this.$i18n.t('menu.'+res.data.data[data].text);
-          if(res.data.data[data].children){
-            for(var child in res.data.data[data].children){
-              res.data.data[data].children[child].text  = this.$i18n.t('menu.'+res.data.data[data].children[child].text);
-            }
-          }
-        }
-        this.items  = res.data.data
-      });
+      this.makeMenu();
+      console.log(this.Lang);
+    },
+    watch:{
+      Lang:function(){
+        this.makeMenu();
+      }
     },
     methods:{
+      makeMenu(){
+        this.$axios.get('/api/v1/Route').then((res)=>{
+          for(var data in res.data.data){
+            res.data.data[data].text  = this.$i18n.t('menu.'+res.data.data[data].text);
+            if(res.data.data[data].children){
+              for(var child in res.data.data[data].children){
+                res.data.data[data].children[child].text  = this.$i18n.t('menu.'+res.data.data[data].children[child].text);
+              }
+            }
+          }
+          this.items  = res.data.data
+        });
+      },
       logout(){
         this.$axios.get('/api/v1/Logout').then((res)=>{
             if(res.data.status=='success'){
@@ -169,6 +178,13 @@
                 this.$common.RemoveUuid();
             }
         });
+      }
+    },
+    computed:{
+      Lang:{
+        get(){
+          return this.$store.state.language;
+        }
       }
     }
   }

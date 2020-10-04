@@ -56,7 +56,7 @@
     },
     methods:{
       GetManager(){
-        console.log(this.options.page);
+        console.log(this.itemsPerPage);
         // const { sortBy, sortDesc, page, itemsPerPage } = this.options;
         this.$axios.get('/api/v1/Manager').then((res)=>{
           if(res.data.status=='success'){

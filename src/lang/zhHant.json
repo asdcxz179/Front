@@ -64,7 +64,7 @@
     		"prevPage":"上一頁",
     		"firstPage":"首頁",
     		"lastPage":"最後一頁",
-    		"pageText":"{2}中的{0}-{1}"
+    		"pageText":"{2} 中的 {0}-{1}"
       	},
       	"datePicker":{
       		"itemsSelected":"已選擇{0}",
