@@ -18,7 +18,12 @@
 		"captcha":"驗證碼",
 		"close":"關閉",
 		"confirm":"確認",
-		"loading":"資料加載中..."
+		"loading":"資料加載中...",
+		"operate":"操作",
+		"cancel":"取消",
+		"insert":"新增",
+		"password_confirmation":"再次確認密碼",
+		"group":"群組"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -30,6 +35,10 @@
 	},
 	"register-page":{
 		"title":"會員註冊"
+	},
+	"managers-page":{
+		"table-name":"管理員列表",
+		"add-manger":"新增管理員"
 	},
 	"menu":{
 		"site_settings":"網站設定",

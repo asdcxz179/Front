@@ -100,4 +100,25 @@ common.AxiosHandle = function (data){
 	Vue.swal(swal_settings);
 }
 
+common.DataNoHandle = function(datas,page,limit){
+	var no = ((page-1)*limit)+1;
+	for(var data in datas){
+		datas[data]['no']	=	no;
+		no++;
+	}
+	return datas;
+}
+
+common.SortHandle = function(options){
+	let extend  = '';
+    if(options.sortBy.length>0){
+      let sort  = 'asc';
+      if(options.sortDesc[0]){
+        sort = 'desc';
+      }
+      extend+='&orderby='+options.sortBy[0]+'&sort='+sort;
+    }
+    return extend;
+}
+
 export default common
