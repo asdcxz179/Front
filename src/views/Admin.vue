@@ -149,7 +149,6 @@
     }),
     created:function(){
       this.makeMenu();
-      console.log(this.Lang);
     },
     watch:{
       Lang:function(){

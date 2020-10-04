@@ -14,11 +14,10 @@
         <v-data-table
           :headers="headers"
           :items="desserts"
-          :items-per-page="10"
           class="elevation-1"
           :loading="loading" 
           v-bind:loading-text="$t('common.loading')"
-          :server-items-length="totalDesserts"
+          :server-items-length="total"
           :options.sync="options"
         ></v-data-table>
       </v-col>
@@ -31,9 +30,15 @@
     data () {
       return {
         loading:true,
-        totalDesserts:0,
-        options:{
-          page:""
+        options: {
+          page: 1,
+          itemsPerPage:10,
+          sortBy: [],
+          sortDesc: [],
+          groupBy: [],
+          groupDesc: [],
+          multiSort: false,
+          mustSort: false,
         },
         headers: [
           {
@@ -49,19 +54,27 @@
         ],
         desserts: [
         ],
+        total:0,
       }
     },
     created:function(){
       this.GetManager();
     },
+    watch: {
+      options: {
+        handler () {
+          this.GetManager();
+        },
+        deep: true,
+      },
+    },
     methods:{
       GetManager(){
-        console.log(this.itemsPerPage);
-        // const { sortBy, sortDesc, page, itemsPerPage } = this.options;
-        this.$axios.get('/api/v1/Manager').then((res)=>{
+        console.log(this.options.itemsPerPage);
+        this.$axios.get('/api/v1/Manager?page='+this.options.page+'&limit='+this.options.itemsPerPage).then((res)=>{
           if(res.data.status=='success'){
             this.desserts   = res.data.data.data;
-            this.totalDesserts  = res.data.data.total;
+            this.total  = res.data.data.total;
           }
           this.loading  = false;
         });
