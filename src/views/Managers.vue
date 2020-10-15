@@ -40,7 +40,7 @@
                   >{{$t('managers-page.add-manger')}}</v-btn>
                 </template>
                 <ValidationObserver ref="RegisterForm" >
-                  <v-form @submit="this.AddManager()" ref="add_form">
+                  <v-form @submit="AddManager" ref="add_form">
                     <v-card>
                       <v-card-title>
                         <span class="headline">{{$t('managers-page.add-manger')}}</span>
@@ -184,7 +184,7 @@
           { text: this.$i18n.t('common.name'), value: 'name' },
           { text: this.$i18n.t('common.email'), value: 'email' },
           { text: this.$i18n.t('common.created_at'), value: 'created_at' },
-          { text: this.$i18n.t('common.operate'), value: 'id',sortable: false, },
+          { text: this.$i18n.t('common.operate'), value: 'uuid',sortable: false, },
         ],
         desserts: [
         ],
