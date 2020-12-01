@@ -23,7 +23,8 @@
 		"cancel":"取消",
 		"insert":"新增",
 		"password_confirmation":"再次確認密碼",
-		"group":"群組"
+		"group":"群組",
+		"role":"身分"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -40,12 +41,22 @@
 		"table-name":"管理員列表",
 		"add-manger":"新增管理員"
 	},
+	"manager-group-page":{
+		"table-name":"管理員群組列表",
+		"add-manger-group":"新增管理員群組"
+	},
+	"manager-role-page":{
+		"table-name":"管理員身分列表",
+		"add-manger-role":"新增管理員身分"
+	},
 	"menu":{
 		"site_settings":"網站設定",
 		"dashboard":"儀錶板",
 		"system_settings":"系統設定",
 		"manager_system":"網站管理員",
-		"managers":"管理員"
+		"managers":"管理員",
+		"manager_group":"管理員群組",
+		"manager_role":"管理員身分"
 	},
 	"$vuetify": {
 		"badge":"徽章",

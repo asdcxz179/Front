@@ -54,7 +54,7 @@
                                   v-bind:label="$t('common.account')" 
                                   type="text" 
                                   required 
-                                  v-model="RegisterForm.account"
+                                  v-model="RegisterForm.username"
                                   :error-messages="errors"
                                 ></v-text-field>
                               </ValidationProvider>
@@ -105,13 +105,24 @@
                             </v-col>
                             <v-col cols="12">
                               <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.group')" rules="required">
-                                <v-text-field 
+                                <v-select 
                                   v-bind:label="$t('common.group')" 
-                                  type="text" 
                                   required 
                                   v-model="RegisterForm.group"
                                   :error-messages="errors"
-                                ></v-text-field>
+                                  :items="GroupItems"
+                                ></v-select>
+                              </ValidationProvider>
+                            </v-col>
+                            <v-col cols="12">
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.role')" rules="required">
+                                <v-select 
+                                  v-bind:label="$t('common.role')" 
+                                  required 
+                                  v-model="RegisterForm.role"
+                                  :error-messages="errors"
+                                  :items="RoleItems"
+                                ></v-select>
                               </ValidationProvider>
                             </v-col>
                           </v-row>
@@ -155,6 +166,8 @@
       return {
         add_dialog:false,
         loading:true,
+        GroupItems:[],
+        RoleItems:[],
         options: {
           page: 1,
           itemsPerPage:10,
@@ -166,12 +179,13 @@
           mustSort: false,
         },
         RegisterForm:{
-          account:"",
+          username:"",
           password:"",
           name:"",
           email:"",
           group:"",
           password_confirmation:"",
+          role:"",
         },
         headers: [
           {
@@ -193,6 +207,8 @@
     },
     created:function(){
       this.GetManager();
+      this.GetManagerGroup();
+      this.GetManagerRole();
     },
     watch: {
       options: {
@@ -209,6 +225,32 @@
           if(res.data.status=='success'){
             this.desserts   = this.$common.DataNoHandle(res.data.data.data,this.options.page,this.options.itemsPerPage);
             this.total  = res.data.data.total;
+          }
+          this.loading  = false;
+        });
+      },
+      GetManagerGroup(){
+        this.$axios.get('/api/v1/Group?limit=-1').then((res)=>{
+          if(res.data.status=='success'){
+            this.GroupItems = res.data.data.data.map(function(item){
+              return {
+                text:item.name,
+                value:item.id,
+              };
+            })
+          }
+          this.loading  = false;
+        });
+      },
+      GetManagerRole(){
+        this.$axios.get('/api/v1/Role?limit=-1').then((res)=>{
+          if(res.data.status=='success'){
+            this.RoleItems = res.data.data.data.map(function(item){
+              return {
+                text:item.name,
+                value:item.id,
+              };
+            })
           }
           this.loading  = false;
         });

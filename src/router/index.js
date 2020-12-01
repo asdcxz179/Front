@@ -35,6 +35,16 @@ Vue.use(VueRouter)
         name: 'Managers',
         component: () => import('../views/Managers.vue')
       },
+      {
+        path: 'ManagerGroup',
+        name: 'ManagerGroup',
+        component: () => import('../views/ManagerGroup.vue')
+      },
+      {
+        path: 'ManagerRole',
+        name: 'ManagerRole',
+        component: () => import('../views/ManagerRole.vue')
+      },
     ]
   }
 ]
