@@ -49,7 +49,7 @@
                         <v-container>
                           <v-row>
                             <v-col cols="12">
-                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.account')" rules="required|min:6|max:12|alpha_num">
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.account')" rules="required|min:6|max:12">
                                 <v-text-field 
                                   v-bind:label="$t('common.account')" 
                                   type="text" 
@@ -139,14 +139,115 @@
               </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="editItem(item)"
-            >
-              mdi-pencil
-            </v-icon>
+          <template v-slot:item.uuid="{ item }">
+            <v-dialog v-model="edit_dialog" max-width="500px">
+              <template v-slot:activator="{}">
+                <v-icon
+                  small
+                  class="mr-2"
+                  @click="GetManagerDetail(item.uuid)"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <ValidationObserver ref="EditForm" >
+                <v-form @submit="EditManager" ref="edit_form">
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">{{$t('managers-page.edit-manger')}}</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.account')" rules="min:6|max:12">
+                              <v-text-field 
+                                v-bind:label="$t('common.account')" 
+                                type="text" 
+                                :error-messages="errors"
+                                v-model="EditForm.username"
+                                :disabled="true"
+                              ></v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.password')" rules="min:6|max:12">
+                              <v-text-field 
+                                v-bind:label="$t('common.password')" 
+                                type="password" 
+                                v-model="EditForm.password"
+                                :error-messages="errors"
+                              ></v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.password_confirmation')" rules="min:6|max:12">
+                              <v-text-field 
+                                v-bind:label="$t('common.password_confirmation')" 
+                                type="password" 
+                                v-model="EditForm.password_confirmation"
+                                :error-messages="errors"
+                              ></v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.name')" rules="required|min:3|max:20">
+                              <v-text-field 
+                                v-bind:label="$t('common.name')" 
+                                type="text" 
+                                required 
+                                v-model="EditForm.name"
+                                :error-messages="errors"
+                              ></v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.email')" rules="email">
+                              <v-text-field 
+                                v-bind:label="$t('common.email')" 
+                                type="text" 
+                                required 
+                                v-model="EditForm.email"
+                                :error-messages="errors"
+                                :disabled="true"
+                              ></v-text-field>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.group')" rules="required">
+                              <v-select 
+                                v-bind:label="$t('common.group')" 
+                                required 
+                                v-model="EditForm.group"
+                                :error-messages="errors"
+                                :items="GroupItems"
+                              ></v-select>
+                            </ValidationProvider>
+                          </v-col>
+                          <v-col cols="12">
+                            <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.role')" rules="required">
+                              <v-select 
+                                v-bind:label="$t('common.role')" 
+                                required 
+                                v-model="EditForm.role"
+                                :error-messages="errors"
+                                :items="RoleItems"
+                              ></v-select>
+                            </ValidationProvider>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="edit_dialog=false">{{$t('common.cancel')}}</v-btn>
+                      <v-btn color="blue darken-1" text type="submit">{{$t('common.update')}}</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-form>
+              </ValidationObserver>
+            </v-dialog>
+            
             <v-icon
               small
               @click="deleteItem(item)"
@@ -165,9 +266,11 @@
     data () {
       return {
         add_dialog:false,
+        edit_dialog:false,
         loading:true,
         GroupItems:[],
         RoleItems:[],
+        EditUUid:"",
         options: {
           page: 1,
           itemsPerPage:10,
@@ -180,6 +283,14 @@
         },
         RegisterForm:{
           username:"",
+          password:"",
+          name:"",
+          email:"",
+          group:"",
+          password_confirmation:"",
+          role:"",
+        },
+        EditForm:{
           password:"",
           name:"",
           email:"",
@@ -255,12 +366,44 @@
           this.loading  = false;
         });
       },
+      GetManagerDetail(uuid){
+        this.EditUUid   = uuid;
+        this.$axios.get('/api/v1/Manager/'+this.EditUUid).then((res)=>{
+            if(res.data.status=='success'){
+              // this.$common.AxiosHandle(res);
+              var tmp   = this.EditForm;
+              tmp.username =  res.data.data.username;
+              tmp.name =  res.data.data.name;
+              tmp.email =  res.data.data.email;
+              tmp.group =  res.data.data.info.group;
+              res.data.data.info.map(function(item){
+                tmp[item.key]  = Number(item.value);
+              })
+              this.EditForm   = tmp;
+              this.edit_dialog=true;
+            }
+        });    
+      },
       AddManager(){
         this.$refs.RegisterForm.validate().then(result => {
           if(result){
             this.$axios.post('/api/v1/Register',this.RegisterForm).then((res)=>{
                 if(res.data.status=='success'){
-                  console.log(1);
+                  this.$common.AxiosHandle(res);
+                  this.add_dialog=false;
+                  this.GetManager();
+                }
+            });    
+          }
+        })
+      },
+      EditManager(){
+        this.$refs.EditForm.validate().then(result => {
+          if(result){
+            this.$axios.put('/api/v1/Manager/'+this.EditUUid,this.EditForm).then((res)=>{
+                if(res.data.status=='success'){
+                  this.$common.AxiosHandle(res);
+                  this.edit_dialog=false;
                 }
             });    
           }

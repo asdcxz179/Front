@@ -156,7 +156,9 @@
           if(result){
             this.$axios.post('/api/v1/Role',this.ManagerRoleForm).then((res)=>{
                 if(res.data.status=='success'){
-                  console.log(1);
+                  this.$common.AxiosHandle(res);
+                  this.add_dialog=false;
+                  this.GetManagerRole();
                 }
             });    
           }

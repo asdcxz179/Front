@@ -89,9 +89,6 @@
                 captcha:"",
                 LoginForm:{
                     username:"",
-                    usernameRules:[
-                        v => !!v || "required",
-                    ],
                     password:"",
                     captcha:"",
                     captcha_key:"",

@@ -156,7 +156,9 @@
           if(result){
             this.$axios.post('/api/v1/Group',this.ManagerGroupForm).then((res)=>{
                 if(res.data.status=='success'){
-                  console.log(1);
+                  this.$common.AxiosHandle(res);
+                  this.add_dialog=false;
+                  this.GetManagerGroup();
                 }
             });    
           }

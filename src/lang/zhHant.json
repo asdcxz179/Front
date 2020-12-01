@@ -24,7 +24,8 @@
 		"insert":"新增",
 		"password_confirmation":"再次確認密碼",
 		"group":"群組",
-		"role":"身分"
+		"role":"身分",
+		"update":"更新"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -39,7 +40,8 @@
 	},
 	"managers-page":{
 		"table-name":"管理員列表",
-		"add-manger":"新增管理員"
+		"add-manger":"新增管理員",
+		"edit-manger":"編輯管理員"
 	},
 	"manager-group-page":{
 		"table-name":"管理員群組列表",
