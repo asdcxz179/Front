@@ -140,15 +140,21 @@
             </v-toolbar>
           </template>
           <template v-slot:item.uuid="{ item }">
-            <v-dialog v-model="edit_dialog" max-width="500px">
-              <template v-slot:activator="{}">
-                <v-icon
-                  small
-                  class="mr-2"
-                  @click="GetManagerDetail(item.uuid)"
-                >
-                  mdi-pencil
-                </v-icon>
+            <v-dialog v-model="edit_dialog" max-width="500px" :retain-focus="false">
+              <template #activator="{ on: dialog }">
+                <v-tooltip bottom >
+                  <template #activator="{ on: tooltip }">
+                    <v-icon
+                      small
+                      class="mr-2"
+                      @click="GetManagerDetail(item.uuid)"
+                      v-on="{ ...tooltip, ...dialog }"
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </template>
+                  <span>{{$t('managers-page.edit-manger')}}</span>
+                </v-tooltip>
               </template>
               <ValidationObserver ref="EditForm" >
                 <v-form @submit="EditManager" ref="edit_form">
@@ -247,13 +253,79 @@
                 </v-form>
               </ValidationObserver>
             </v-dialog>
-            
-            <v-icon
-              small
-              @click="deleteItem(item)"
-            >
-              mdi-delete
-            </v-icon>
+            <v-dialog v-model="disable_dialog" max-width="500px" :retain-focus="false">
+              <template #activator="{ on: dialog }">
+                <v-tooltip bottom >
+                  <template #activator="{ on: tooltip }">
+                    <v-icon
+                      small
+                      v-on="{ ...tooltip, ...dialog }"
+                      v-if="item.status==1"
+                    >
+                      mdi-block-helper
+                    </v-icon>
+                    <v-icon
+                      small
+                      v-on="{ ...tooltip, ...dialog }"
+                      v-else
+                    >
+                      mdi-check
+                    </v-icon>
+                  </template>
+                  <span
+                    v-if="item.status==1"
+                  >
+                    {{$t('managers-page.disable-manger')}}
+                  </span>
+                  <span
+                    v-else
+                  >
+                    {{$t('managers-page.enable-manger')}}
+                  </span>
+                </v-tooltip>
+              </template>
+              <v-card>
+                <v-card-title 
+                  class="headline"
+                  v-if="item.status==1"
+                >
+                  {{$t('managers-page.disable-manger')}}
+                </v-card-title>
+                 <v-card-title 
+                  class="headline"
+                  v-else
+                >
+                  {{$t('managers-page.enable-manger')}}
+                </v-card-title>
+                <v-card-text
+                  v-if="item.status==1"
+                >
+                  {{$t('common.are-you-disable')}}
+                </v-card-text>
+                <v-card-text
+                  v-else
+                >
+                  {{$t('common.are-you-enable')}}
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="disable_dialog= false"
+                  >
+                    {{$t('common.cancel')}}
+                  </v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="DisableItem(item)"
+                  >
+                    {{$t('common.confirm')}}
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </template>
         </v-data-table>
       </v-col>
@@ -267,6 +339,7 @@
       return {
         add_dialog:false,
         edit_dialog:false,
+        disable_dialog:false,
         loading:true,
         GroupItems:[],
         RoleItems:[],
@@ -297,6 +370,7 @@
           group:"",
           password_confirmation:"",
           role:"",
+          username:"",
         },
         headers: [
           {
@@ -328,6 +402,18 @@
         },
         deep: true,
       },
+      edit_dialog(){
+        if(typeof(this.$refs.edit_form)!=='undefined'){
+          this.$refs.edit_form.reset();
+          this.$refs.EditForm.reset();  
+        }
+      },
+      add_dialog(){
+        if(typeof(this.$refs.add_form)!=='undefined'){
+          this.$refs.add_form.reset();
+          this.$refs.RegisterForm.reset();
+        }
+      }
     },
     methods:{
       GetManager(){
@@ -370,7 +456,6 @@
         this.EditUUid   = uuid;
         this.$axios.get('/api/v1/Manager/'+this.EditUUid).then((res)=>{
             if(res.data.status=='success'){
-              // this.$common.AxiosHandle(res);
               var tmp   = this.EditForm;
               tmp.username =  res.data.data.username;
               tmp.name =  res.data.data.name;
@@ -404,10 +489,22 @@
                 if(res.data.status=='success'){
                   this.$common.AxiosHandle(res);
                   this.edit_dialog=false;
+                  this.GetManager();
+
                 }
             });    
           }
         })
+      },
+      DisableItem(item){
+        let status  =   (item.status)?0:1;
+        this.$axios.put('/api/v1/DisableManager/'+item.uuid,{status:status}).then((res)=>{
+          if(res.data.status=='success'){
+            this.$common.AxiosHandle(res);
+            this.disable_dialog=false;
+            this.GetManager();
+          }
+        }); 
       }
     }
   }

@@ -25,7 +25,9 @@
 		"password_confirmation":"再次確認密碼",
 		"group":"群組",
 		"role":"身分",
-		"update":"更新"
+		"update":"更新",
+		"are-you-disable":"你確定要禁用?",
+		"are-you-enable":"你確定要啟用?"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -41,7 +43,9 @@
 	"managers-page":{
 		"table-name":"管理員列表",
 		"add-manger":"新增管理員",
-		"edit-manger":"編輯管理員"
+		"edit-manger":"編輯管理員",
+		"disable-manger":"禁用管理員",
+		"enable-manger":"啟用管理員"
 	},
 	"manager-group-page":{
 		"table-name":"管理員群組列表",
