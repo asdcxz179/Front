@@ -326,8 +326,6 @@
                 {{$t('managers-page.enable-manger')}}
               </span>
             </v-tooltip>
-            
-            
           </template>
         </v-data-table>
       </v-col>
