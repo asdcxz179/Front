@@ -105,6 +105,42 @@
                   </v-form>
                 </ValidationObserver>
               </v-dialog>
+              <v-dialog v-model="edit_permission_dailog" max-width="500px" :retain-focus="false">
+                <v-form @submit="EditManagerGroupPermission" ref="edit_permission_form">
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">{{$t('manager-group-page.edit-manger-group')}}</span>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-container>
+                        <template>
+                          <v-treeview
+                            ref="permission"
+                            selectable
+                            :items="PermissionItems"
+                            :active="PermissionActive"
+                            v-model="PermissionActive"
+                          >
+                            <template v-slot:prepend="{ item }">
+                              <v-icon>
+                                {{ item.icon }}
+                              </v-icon>
+                            </template>
+                            <template v-slot:label="{ item }">
+                              {{ $t(`menu.${item.name}`) }}
+                            </template>
+                          </v-treeview>
+                        </template>
+                      </v-container>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="edit_permission_dailog=false">{{$t('common.cancel')}}</v-btn>
+                      <v-btn color="blue darken-1" text type="submit">{{$t('common.update')}}</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-form>
+              </v-dialog>
           </template>
           <template v-slot:item.id="{ item }">
             <v-tooltip bottom >
@@ -120,14 +156,25 @@
               </template>
               <span>{{$t('manager-group-page.edit-manger-group')}}</span>
             </v-tooltip>
+            <v-tooltip bottom >
+              <template #activator="{ on: tooltip }">
+                <v-icon
+                  small
+                  class="mr-2"
+                  @click="GetManagerGroupPermissionDetail(item.id)"
+                  v-on="{ ...tooltip}"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>{{$t('manager-group-page.edit-manger-group-permission')}}</span>
+            </v-tooltip>
           </template>
         </v-data-table>
       </v-col>
     </v-row>
-    <v-treeview
-    selectable
-    :items="items"
-  ></v-treeview>
+    
+    
   </v-container>
 </template>
 
@@ -137,6 +184,7 @@
       return {
         add_dialog:false,
         edit_dialog:false,
+        edit_permission_dailog:false,
         loading:true,
         Editid:"",
         options: {
@@ -169,83 +217,17 @@
         desserts: [
         ],
         total:0,
-        items: [
-          {
-            id: 1,
-            name: 'Applications :',
-            children: [
-              { id: 2, name: 'Calendar : app' },
-              { id: 3, name: 'Chrome : app' },
-              { id: 4, name: 'Webstorm : app' },
-            ],
-          },
-          {
-            id: 5,
-            name: 'Documents :',
-            children: [
-              {
-                id: 6,
-                name: 'vuetify :',
-                children: [
-                  {
-                    id: 7,
-                    name: 'src :',
-                    children: [
-                      { id: 8, name: 'index : ts' },
-                      { id: 9, name: 'bootstrap : ts' },
-                    ],
-                  },
-                ],
-              },
-              {
-                id: 10,
-                name: 'material2 :',
-                children: [
-                  {
-                    id: 11,
-                    name: 'src :',
-                    children: [
-                      { id: 12, name: 'v-btn : ts' },
-                      { id: 13, name: 'v-card : ts' },
-                      { id: 14, name: 'v-window : ts' },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 15,
-            name: 'Downloads :',
-            children: [
-              { id: 16, name: 'October : pdf' },
-              { id: 17, name: 'November : pdf' },
-              { id: 18, name: 'Tutorial : html' },
-            ],
-          },
-          {
-            id: 19,
-            name: 'Videos :',
-            children: [
-              {
-                id: 20,
-                name: 'Tutorials :',
-                children: [
-                  { id: 21, name: 'Basic layouts : mp4' },
-                  { id: 22, name: 'Advanced techniques : mp4' },
-                  { id: 23, name: 'All about app : dir' },
-                ],
-              },
-              { id: 24, name: 'Intro : mov' },
-              { id: 25, name: 'Conference introduction : avi' },
-            ],
-          },
-        ]
+        PermissionItems: [
+          
+        ],
+        PermissionActive:[
+          1
+        ],
       }
-      
     },
     created:function(){
       this.GetManagerGroup();
+      this.GetManagerPermission();
     },
     watch: {
       options: {
@@ -254,6 +236,11 @@
         },
         deep: true,
       },
+      PermissionItems:function(){
+        if(typeof(this.$refs.permission)!=='undefined'){
+          this.$refs.permission.updateAll(true);
+        }
+      }
     },
     methods:{
       GetManagerGroup(){
@@ -307,6 +294,38 @@
           }
         })
       },
+      GetManagerPermission(){
+        this.$axios.get('/api/v1/Permission').then((res)=>{
+          if(res.data.status=='success'){
+            this.PermissionItems = res.data.data;
+          }
+        });
+      },
+      GetManagerGroupPermissionDetail(id){
+        this.Editid   = id;
+        // this.$axios.get('/api/v1/Permission/'+this.Editid).then((res)=>{
+        //     if(res.data.status=='success'){
+        //       var tmp   = this.EditForm;
+        //       tmp.name =  res.data.data.name;
+        //       this.EditForm   = tmp;
+              this.edit_permission_dailog=true;
+              this.PermissionActive   = [3,5];
+        //     }
+        // });    
+      },
+      EditManagerGroupPermission(){
+        this.$refs.EditForm.validate().then(result => {
+          if(result){
+            this.$axios.put('/api/v1/Group/'+this.Editid,this.EditForm).then((res)=>{
+                if(res.data.status=='success'){
+                  this.$common.AxiosHandle(res);
+                  this.edit_dialog=false;
+                  this.GetManagerGroup();
+                }
+            });    
+          }
+        })
+      }
     }
   }
 </script>

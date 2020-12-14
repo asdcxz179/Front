@@ -50,7 +50,8 @@
 	"manager-group-page":{
 		"table-name":"管理員群組列表",
 		"add-manger-group":"新增管理員群組",
-		"edit-manger-group":"編輯管理員群組"
+		"edit-manger-group":"編輯管理員群組",
+		"edit-manger-group-permission":"編輯管理員群組權限"
 	},
 	"manager-role-page":{
 		"table-name":"管理員身分列表",
@@ -63,7 +64,8 @@
 		"manager_system":"網站管理員",
 		"managers":"管理員",
 		"manager_group":"管理員群組",
-		"manager_role":"管理員身分"
+		"manager_role":"管理員身分",
+		"system_manager":"系統管理組"
 	},
 	"$vuetify": {
 		"badge":"徽章",
