@@ -164,7 +164,7 @@
                   @click="GetManagerGroupPermissionDetail(item.id)"
                   v-on="{ ...tooltip}"
                 >
-                  mdi-pencil
+                  mdi-account-settings
                 </v-icon>
               </template>
               <span>{{$t('manager-group-page.edit-manger-group-permission')}}</span>
