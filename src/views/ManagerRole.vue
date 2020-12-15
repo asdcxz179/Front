@@ -71,22 +71,75 @@
                   </v-form>
                 </ValidationObserver>
               </v-dialog>
+              <v-dialog v-model="edit_dialog" max-width="500px" :retain-focus="false">
+                <ValidationObserver ref="EditForm" >
+                  <v-form @submit="EditManagerRole" ref="edit_form">
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">{{$t('manager-role-page.edit-manger-role')}}</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12">
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.name')" rules="required|min:3|max:20">
+                                <v-text-field 
+                                  v-bind:label="$t('common.name')" 
+                                  type="text" 
+                                  required 
+                                  v-model="EditForm.name"
+                                  :error-messages="errors"
+                                ></v-text-field>
+                              </ValidationProvider>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <template>
+                              <v-treeview
+                                ref="permission"
+                                selectable
+                                :items="PermissionItems"
+                                :active="PermissionActive"
+                                v-model="PermissionActive"
+                              >
+                                <template v-slot:prepend="{ item }">
+                                  <v-icon>
+                                    {{ item.icon }}
+                                  </v-icon>
+                                </template>
+                                <template v-slot:label="{ item }">
+                                  {{ $t(`menu.${item.name}`) }}
+                                </template>
+                              </v-treeview>
+                            </template>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="edit_dialog=false">{{$t('common.cancel')}}</v-btn>
+                        <v-btn color="blue darken-1" text type="submit">{{$t('common.update')}}</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-form>
+                </ValidationObserver>
+              </v-dialog>
             </v-toolbar>
           </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="editItem(item)"
-            >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              small
-              @click="deleteItem(item)"
-            >
-              mdi-delete
-            </v-icon>
+          <template v-slot:item.id="{ item }">
+            <v-tooltip bottom >
+              <template #activator="{ on: tooltip }">
+                <v-icon
+                  small
+                  class="mr-2"
+                  @click="GetManagerRoleDetail(item.id)"
+                  v-on="{ ...tooltip}"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>{{$t('manager-role-page.edit-manger-role')}}</span>
+            </v-tooltip>
           </template>
         </v-data-table>
       </v-col>
@@ -99,6 +152,7 @@
     data () {
       return {
         add_dialog:false,
+        edit_dialog:false,
         loading:true,
         options: {
           page: 1,
@@ -113,6 +167,9 @@
         ManagerRoleForm:{
           name:"",
         },
+        EditForm:{
+          name:"",
+        },
         headers: [
           {
             text: this.$i18n.t('common.no'),
@@ -122,15 +179,21 @@
           },
           { text: this.$i18n.t('common.name'), value: 'name' },
           { text: this.$i18n.t('common.created_at'), value: 'created_at' },
-          { text: this.$i18n.t('common.operate'), value: 'uuid',sortable: false, },
+          { text: this.$i18n.t('common.operate'), value: 'id',sortable: false, },
         ],
         desserts: [
         ],
         total:0,
+        PermissionItems: [
+          
+        ],
+        PermissionActive:[
+        ],
       }
     },
     created:function(){
       this.GetManagerRole();
+      this.GetManagerPermission();
     },
     watch: {
       options: {
@@ -143,7 +206,7 @@
     methods:{
       GetManagerRole(){
         let extend  = this.$common.SortHandle(this.options);
-        this.$axios.get('/api/v1/Role?page='+this.options.page+'&limit='+this.options.itemsPerPage+extend).then((res)=>{
+        this.$axios.get('/api/v1/ManagerRole?page='+this.options.page+'&limit='+this.options.itemsPerPage+extend).then((res)=>{
           if(res.data.status=='success'){
             this.desserts   = this.$common.DataNoHandle(res.data.data.data,this.options.page,this.options.itemsPerPage);
             this.total  = res.data.data.total;
@@ -154,7 +217,7 @@
       AddManagerRole(){
         this.$refs.ManagerRoleForm.validate().then(result => {
           if(result){
-            this.$axios.post('/api/v1/Role',this.ManagerRoleForm).then((res)=>{
+            this.$axios.post('/api/v1/ManagerRole',this.ManagerRoleForm).then((res)=>{
                 if(res.data.status=='success'){
                   this.$common.AxiosHandle(res);
                   this.add_dialog=false;
@@ -163,6 +226,43 @@
             });    
           }
         })
+      },
+      GetManagerRoleDetail(id){
+        this.Editid   = id;
+        if(typeof(this.$refs.edit_form)!=='undefined'){
+          this.$refs.edit_form.reset();
+          this.$refs.EditForm.reset();  
+        }
+        this.$axios.get('/api/v1/ManagerRole/'+this.Editid).then((res)=>{
+            if(res.data.status=='success'){
+              var tmp   = this.EditForm;
+              tmp.name =  res.data.data.info.name;
+              this.EditForm   = tmp;
+              this.PermissionActive   = res.data.data.permission;
+              this.edit_dialog=true;
+            }
+        });    
+      },
+      EditManagerRole(){
+        this.$refs.EditForm.validate().then(result => {
+          if(result){
+            this.EditForm.permission  = this.PermissionActive;
+            this.$axios.put('/api/v1/ManagerRole/'+this.Editid,this.EditForm).then((res)=>{
+                if(res.data.status=='success'){
+                  this.$common.AxiosHandle(res);
+                  this.edit_dialog=false;
+                  this.GetManagerGroup();
+                }
+            });    
+          }
+        })
+      },
+      GetManagerPermission(){
+        this.$axios.get('/api/v1/Permission').then((res)=>{
+          if(res.data.status=='success'){
+            this.PermissionItems = res.data.data;
+          }
+        });
       }
     }
   }

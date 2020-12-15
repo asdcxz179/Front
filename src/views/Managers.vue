@@ -414,7 +414,7 @@
     methods:{
       GetManager(){
         let extend  = this.$common.SortHandle(this.options);
-        this.$axios.get('/api/v1/Manager?page='+this.options.page+'&limit='+this.options.itemsPerPage+extend).then((res)=>{
+        this.$axios.get('/api/v1/Managers?page='+this.options.page+'&limit='+this.options.itemsPerPage+extend).then((res)=>{
           if(res.data.status=='success'){
             this.desserts   = this.$common.DataNoHandle(res.data.data.data,this.options.page,this.options.itemsPerPage);
             this.total  = res.data.data.total;
@@ -423,7 +423,7 @@
         });
       },
       GetManagerGroup(){
-        this.$axios.get('/api/v1/Group?limit=-1').then((res)=>{
+        this.$axios.get('/api/v1/ManagerGroup?limit=-1').then((res)=>{
           if(res.data.status=='success'){
             this.GroupItems = res.data.data.data.map(function(item){
               return {
@@ -436,7 +436,7 @@
         });
       },
       GetManagerRole(){
-        this.$axios.get('/api/v1/Role?limit=-1').then((res)=>{
+        this.$axios.get('/api/v1/ManagerRole?limit=-1').then((res)=>{
           if(res.data.status=='success'){
             this.RoleItems = res.data.data.data.map(function(item){
               return {
@@ -454,7 +454,7 @@
           this.$refs.edit_form.reset();
           this.$refs.EditForm.reset();  
         }
-        this.$axios.get('/api/v1/Manager/'+this.EditUUid).then((res)=>{
+        this.$axios.get('/api/v1/Managers/'+this.EditUUid).then((res)=>{
             if(res.data.status=='success'){
               var tmp   = this.EditForm;
               tmp.username =  res.data.data.username;
@@ -485,7 +485,7 @@
       EditManager(){
         this.$refs.EditForm.validate().then(result => {
           if(result){
-            this.$axios.put('/api/v1/Manager/'+this.EditUUid,this.EditForm).then((res)=>{
+            this.$axios.put('/api/v1/Managers/'+this.EditUUid,this.EditForm).then((res)=>{
                 if(res.data.status=='success'){
                   this.$common.AxiosHandle(res);
                   this.edit_dialog=false;

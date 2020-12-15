@@ -55,9 +55,16 @@
 	},
 	"manager-role-page":{
 		"table-name":"管理員身分列表",
-		"add-manger-role":"新增管理員身分"
+		"add-manger-role":"新增管理員身分",
+		"edit-manger-role":"編輯管理員身分群組",
+		"edit-manger-role-permission":"編輯管理員身分權限"
 	},
 	"menu":{
+		"index":"顯示",
+		"show":"查詢",
+		"store":"新增",
+		"update":"更新",
+		"destroy":"刪除",
 		"site_settings":"網站設定",
 		"dashboard":"儀錶板",
 		"system_settings":"系統設定",
