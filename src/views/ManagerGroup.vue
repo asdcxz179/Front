@@ -102,6 +102,7 @@
                                 :items="PermissionItems"
                                 :active="PermissionActive"
                                 v-model="PermissionActive"
+                                :open-all="open_all"
                               >
                                 <template v-slot:prepend="{ item }">
                                   <v-icon>
@@ -156,6 +157,7 @@
         add_dialog:false,
         edit_dialog:false,
         loading:true,
+        open_all:false,
         Editid:"",
         options: {
           page: 1,
@@ -247,6 +249,7 @@
               tmp.name =  res.data.data.info.name;
               this.EditForm   = tmp;
               this.PermissionActive   = res.data.data.permission;
+              this.open_all   = true;
               this.edit_dialog=true;
             }
         });    
