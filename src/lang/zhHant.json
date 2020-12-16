@@ -27,7 +27,8 @@
 		"role":"身分",
 		"update":"更新",
 		"are-you-disable":"你確定要禁用?",
-		"are-you-enable":"你確定要啟用?"
+		"are-you-enable":"你確定要啟用?",
+		"save":"儲存"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -58,6 +59,11 @@
 		"add-manger-role":"新增管理員身分",
 		"edit-manger-role":"編輯管理員身分群組",
 		"edit-manger-role-permission":"編輯管理員身分權限"
+	},
+	"system-settings-page":{
+		"general-settings":"一般設定",
+		"maintenace-settings":"維護設定",
+		"web_name":"網站名稱"
 	},
 	"menu":{
 		"index":"顯示",
