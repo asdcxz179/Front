@@ -72,7 +72,8 @@
 		"managers":"管理員",
 		"manager_group":"管理員群組",
 		"manager_role":"管理員身分",
-		"system_manager":"系統管理組"
+		"system_manager":"系統管理組",
+		"disable_manager":"停用管理員"
 	},
 	"$vuetify": {
 		"badge":"徽章",
