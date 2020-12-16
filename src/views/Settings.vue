@@ -33,20 +33,24 @@
               <v-tabs-items v-model="tab">
                 <v-tab-item
                 >
-                  <v-form ref="general-form">
-                    <v-card>
-                      <v-card-text >
-                        <v-text-field
-                          v-model="general_form.web_name"
-                          v-bind:label="$t('system-settings-page.web_name')" 
-                          required
-                        ></v-text-field>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-form>
+                  <ValidationObserver ref="GeneralForm" >
+                    <v-form ref="general-form" @submit="EditSettings('GeneralForm')">
+                      <v-card>
+                        <v-card-text >
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.web_name')" rules="required">
+                            <v-text-field
+                              v-model="settings.GeneralForm.web_name"
+                              v-bind:label="$t('system-settings-page.web_name')" 
+                              :error-messages="errors"
+                            ></v-text-field>
+                          </ValidationProvider>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
+                  </ValidationObserver>
                 </v-tab-item>
                 <v-tab-item
                 >
@@ -88,9 +92,34 @@
       start_time_menu: false,
       end_time_menu: false,
       tab: null,
-      general_form:{
-        web_name:""
+      settings:{
+        GeneralForm:{
+          web_name:""
+        },
       },
     }),
+    created:function(){
+      this.GetSettings();
+    },
+    methods:{
+      GetSettings(){
+        this.$axios.get('/api/v1/Settings').then((res)=>{
+          if(res.data.status=='success'){
+            console.log(res);
+          }
+        });
+      },
+      EditSettings(validate){
+        this.$refs[validate].validate().then(result => {
+          if(result){
+            this.$axios.put('/api/v1/Settings/Update',this.settings[validate]).then((res)=>{
+                if(res.data.status=='success'){
+                  this.$common.AxiosHandle(res);
+                }
+            });    
+          }
+        })
+      },
+    }
   }
 </script>
