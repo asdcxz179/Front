@@ -44,6 +44,13 @@
                               :error-messages="errors"
                             ></v-text-field>
                           </ValidationProvider>
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.web_email')" rules="required|email">
+                            <v-text-field
+                              v-model="settings.GeneralForm.web_email"
+                              v-bind:label="$t('system-settings-page.web_email')" 
+                              :error-messages="errors"
+                            ></v-text-field>
+                          </ValidationProvider>
                         </v-card-text>
                         <v-card-actions>
                           <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
@@ -54,19 +61,40 @@
                 </v-tab-item>
                 <v-tab-item
                 >
-                  <v-form ref="maintenace-form">
-                    <v-card>
-                      <v-card-text >
-                        <v-text-field
-                          label="Name2"
-                          required
-                        ></v-text-field>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-form>
+                  <ValidationObserver ref="MaintenaceForm" >
+                    <v-form ref="maintenace-form" @submit="EditSettings('MaintenaceForm')">
+                      <v-card>
+                        <v-card-text >
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_switch')" rules="required">
+                            <v-switch
+                              v-model="settings.MaintenaceForm.maintenance_switch"
+                              v-bind:label="$t('system-settings-page.maintenance_switch')" 
+                              :error-messages="errors"
+                            ></v-switch>
+                          </ValidationProvider>
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_start_time')" rules="">
+                            <v-datetime-picker 
+                              v-bind:label="$t('system-settings-page.maintenance_start_time')"  
+                              v-model="settings.MaintenaceForm.maintenance_start_datetime"
+                              :error-messages="errors"
+                              :timePickerProps="timePickerProps"
+                            > </v-datetime-picker>
+                          </ValidationProvider>
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_end_time')" rules="">
+                            <v-datetime-picker 
+                              v-bind:label="$t('system-settings-page.maintenance_end_time')"  
+                              v-model="settings.MaintenaceForm.maintenance_end_datetime"
+                              :error-messages="errors"
+                              :timePickerProps="timePickerProps"
+                            > </v-datetime-picker>
+                          </ValidationProvider>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
+                  </ValidationObserver>
                 </v-tab-item>
               </v-tabs-items>
             </v-card-text>
@@ -94,9 +122,18 @@
       tab: null,
       settings:{
         GeneralForm:{
-          web_name:""
+          web_name:"",
+          web_email:"",
         },
+        MaintenaceForm:{
+          maintenance_switch:false,
+          maintenance_start_datetime:"",
+          maintenance_end_datetime:"",
+        }
       },
+      timePickerProps:{
+        format:"24hr",
+      }
     }),
     created:function(){
       this.GetSettings();
@@ -105,7 +142,11 @@
       GetSettings(){
         this.$axios.get('/api/v1/Settings').then((res)=>{
           if(res.data.status=='success'){
-            console.log(res);
+            for(let form in this.settings ){
+              for(let name in this.settings[form]){
+                this.settings[form][name] = res.data.data[name];
+              }
+            }
           }
         });
       },
