@@ -11,7 +11,6 @@ import Language from './components/Language.vue';
 import Password from './components/Password.vue';
 import VueCookies from 'vue-cookies'
 import VueI18n from 'vue-i18n'
-import DatetimePicker from 'vuetify-datetime-picker';
 import { localize } from 'vee-validate';
 import { required, email, max, min, alpha,alpha_num } from 'vee-validate/dist/rules'
 import { extend,ValidationObserver, ValidationProvider } from 'vee-validate'
@@ -20,7 +19,6 @@ const i18n = new VueI18n();
 
 Vue.use(VueCookies);
 Vue.use(VueSweetalert2);
-Vue.use(DatetimePicker);
 Vue.config.productionTip = false
 Vue.prototype.$common = common;
 Vue.prototype.$axios = axios;

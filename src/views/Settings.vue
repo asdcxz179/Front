@@ -27,7 +27,7 @@
                 </v-tab>
                 <v-tab
                 >
-                  {{$t('system-settings-page.maintenace-settings')}}
+                  {{$t('system-settings-page.maintenance-settings')}}
                 </v-tab>
               </v-tabs>
               <v-tabs-items v-model="tab">
@@ -61,33 +61,147 @@
                 </v-tab-item>
                 <v-tab-item
                 >
-                  <ValidationObserver ref="MaintenaceForm" >
-                    <v-form ref="maintenace-form" @submit="EditSettings('MaintenaceForm')">
+                  <ValidationObserver ref="MaintenanceForm" >
+                    <v-form ref="maintenance-form" @submit="EditSettings('MaintenanceForm')">
                       <v-card>
                         <v-card-text >
                           <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_switch')" rules="required">
                             <v-switch
-                              v-model="settings.MaintenaceForm.maintenance_switch"
+                              v-model="settings.MaintenanceForm.maintenance_switch"
                               v-bind:label="$t('system-settings-page.maintenance_switch')" 
                               :error-messages="errors"
                             ></v-switch>
                           </ValidationProvider>
-                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_start_time')" rules="">
-                            <v-datetime-picker 
-                              v-bind:label="$t('system-settings-page.maintenance_start_time')"  
-                              v-model="settings.MaintenaceForm.maintenance_start_datetime"
-                              :error-messages="errors"
-                              :timePickerProps="timePickerProps"
-                            > </v-datetime-picker>
-                          </ValidationProvider>
-                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_end_time')" rules="">
-                            <v-datetime-picker 
-                              v-bind:label="$t('system-settings-page.maintenance_end_time')"  
-                              v-model="settings.MaintenaceForm.maintenance_end_datetime"
-                              :error-messages="errors"
-                              :timePickerProps="timePickerProps"
-                            > </v-datetime-picker>
-                          </ValidationProvider>
+                          <v-row>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_start_date')" rules="">
+                                <v-menu
+                                  v-model="menu_maintenance_start_date"
+                                  :close-on-content-click="false"
+                                  :nudge-right="40"
+                                  transition="scale-transition"
+                                  offset-y
+                                  min-width="290px"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      v-model="maintenance_start_date"
+                                      v-bind:label="$t('system-settings-page.maintenance_start_date')"  
+                                      prepend-icon="mdi-calendar"
+                                      readonly
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      :error-messages="errors"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-date-picker
+                                    v-model="maintenance_start_date"
+                                    @input="menu_maintenance_start_date = false"
+                                  ></v-date-picker>
+                                </v-menu>
+                              </ValidationProvider>
+                            </v-col>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_time')" rules="">
+                                <v-menu
+                                  ref="menu_maintenance_start_time"
+                                  v-model="menu_maintenance_start_time"
+                                  :close-on-content-click="false"
+                                  :nudge-right="40"
+                                  :return-value.sync="menu_maintenance_start_time"
+                                  transition="scale-transition"
+                                  offset-y
+                                  max-width="290px"
+                                  min-width="290px"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      v-model="maintenance_start_time"
+                                      v-bind:label="$t('system-settings-page.maintenance_start_time')"  
+                                      prepend-icon="mdi-clock-time-four-outline"
+                                      readonly
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      :error-messages="errors"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-time-picker
+                                    v-if="menu_maintenance_start_time"
+                                    v-model="maintenance_start_time"
+                                    full-width
+                                    format="24hr"
+                                    use-seconds
+                                    @click:second="$refs.menu_maintenance_start_time.save(maintenance_start_time)"
+                                  ></v-time-picker>
+                                </v-menu>
+                              </ValidationProvider>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_end_date')" rules="">
+                                <v-menu
+                                  v-model="menu_maintenance_end_date"
+                                  :close-on-content-click="false"
+                                  :nudge-right="40"
+                                  transition="scale-transition"
+                                  offset-y
+                                  min-width="290px"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      v-model="maintenance_end_date"
+                                      v-bind:label="$t('system-settings-page.maintenance_end_date')"  
+                                      prepend-icon="mdi-calendar"
+                                      readonly
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      :error-messages="errors"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-date-picker
+                                    v-model="maintenance_end_date"
+                                    @input="menu_maintenance_end_date = false"
+                                  ></v-date-picker>
+                                </v-menu>
+                              </ValidationProvider>
+                            </v-col>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.maintenance_end_time')" rules="">
+                                <v-menu
+                                  ref="menu_maintenance_end_time"
+                                  v-model="menu_maintenance_end_time"
+                                  :close-on-content-click="false"
+                                  :nudge-right="40"
+                                  :return-value.sync="menu_maintenance_end_time"
+                                  transition="scale-transition"
+                                  offset-y
+                                  max-width="290px"
+                                  min-width="290px"
+                                >
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                      v-model="maintenance_end_time"
+                                      v-bind:label="$t('system-settings-page.maintenance_end_time')"  
+                                      prepend-icon="mdi-clock-time-four-outline"
+                                      readonly
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      :error-messages="errors"
+                                    ></v-text-field>
+                                  </template>
+                                  <v-time-picker
+                                    v-if="menu_maintenance_end_time"
+                                    v-model="maintenance_end_time"
+                                    full-width
+                                    format="24hr"
+                                    use-seconds
+                                    @click:second="$refs.menu_maintenance_end_time.save(menu_maintenance_end_time)"
+                                  ></v-time-picker>
+                                </v-menu>
+                              </ValidationProvider>
+                            </v-col>
+                          </v-row>
                         </v-card-text>
                         <v-card-actions>
                           <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
@@ -107,38 +221,67 @@
 <script>
   export default {
     data: () => ({
-      type: 'month',
-      types: ['month', 'week', 'day'],
-      mode: 'stack',
-      weekday: [0, 1, 2, 3, 4, 5, 6],
-      value: '',
-      events: [],
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
-      start_date_menu: false,
-      end_date_menu: false,
-      start_time_menu: false,
-      end_time_menu: false,
       tab: null,
       settings:{
         GeneralForm:{
           web_name:"",
           web_email:"",
         },
-        MaintenaceForm:{
+        MaintenanceForm:{
           maintenance_switch:false,
           maintenance_start_datetime:"",
           maintenance_end_datetime:"",
         }
       },
-      timePickerProps:{
-        format:"24hr",
-      }
+      menu_maintenance_start_date:false,
+      menu_maintenance_start_time:false,
+      maintenance_start_date:"",
+      maintenance_start_time:"00:00:00",
+      menu_maintenance_end_date:false,
+      menu_maintenance_end_time:false,
+      maintenance_end_date:"",
+      maintenance_end_time:"00:00:00",
     }),
+    watch: {
+      options: {
+        handler () {
+          this.GetManagerGroup();
+        },
+        deep: true,
+      },
+      maintenance_start_date:function(){
+        this.StartDateHandle()
+      },
+      maintenance_start_time:function(){
+        this.StartDateHandle()
+      },
+      maintenance_end_date:function(){
+        this.EndDateHandle()
+      },
+      maintenance_end_time:function(){
+        this.EndDateHandle()
+      },
+      "settings.MaintenanceForm.maintenance_start_datetime":function(){
+        let tmp = this.settings.MaintenanceForm.maintenance_start_datetime.split(' ');
+        this.maintenance_start_date = tmp[0];
+        this.maintenance_start_time = tmp[1];
+      },
+      "settings.MaintenanceForm.maintenance_end_datetime":function(){
+        let tmp = this.settings.MaintenanceForm.maintenance_end_datetime.split(' ');
+        this.maintenance_end_date = tmp[0];
+        this.maintenance_end_time = tmp[1];
+      }
+    },
     created:function(){
       this.GetSettings();
     },
     methods:{
+      StartDateHandle(){
+        this.settings.MaintenanceForm.maintenance_start_datetime = this.maintenance_start_date+' '+this.maintenance_start_time
+      },
+      EndDateHandle(){
+        this.settings.MaintenanceForm.maintenance_end_datetime = this.maintenance_end_date+' '+this.maintenance_end_time
+      },
       GetSettings(){
         this.$axios.get('/api/v1/Settings').then((res)=>{
           if(res.data.status=='success'){

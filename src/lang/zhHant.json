@@ -62,11 +62,13 @@
 	},
 	"system-settings-page":{
 		"general-settings":"一般設定",
-		"maintenace-settings":"維護設定",
+		"maintenance-settings":"維護設定",
 		"web_name":"網站名稱",
 		"web_email":"網站E-mail",
 		"maintenance_switch":"維護開關",
+		"maintenance_start_date":"維護開始日期",
 		"maintenance_start_time":"維護開始時間",
+		"maintenance_end_date":"維護結束日期",
 		"maintenance_end_time":"維護結束時間"
 	},
 	"menu":{
