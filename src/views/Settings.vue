@@ -270,6 +270,11 @@
         let tmp = this.settings.MaintenanceForm.maintenance_end_datetime.split(' ');
         this.maintenance_end_date = tmp[0];
         this.maintenance_end_time = tmp[1];
+      },
+      "settings.MaintenanceForm.maintenance_switch":function(){
+        if(typeof(this.settings.MaintenanceForm.maintenance_switch)!=="boolean"){
+          this.settings.MaintenanceForm.maintenance_switch   = parseInt(this.settings.MaintenanceForm.maintenance_switch);  
+        }
       }
     },
     created:function(){
