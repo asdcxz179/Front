@@ -37,6 +37,25 @@
                     <v-form ref="general-form" @submit="EditSettings('GeneralForm')">
                       <v-card>
                         <v-card-text >
+                          <v-row>
+                            <v-col cols=1>
+                              <v-img
+                                :src="'http://localhost'+settings.GeneralForm.web_ico"
+                              ></v-img>
+                            </v-col>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.web_ico')" rules="">
+                                <v-file-input
+                                  ref="web_ico"
+                                  accept=".ico"
+                                  v-bind:label="$t('system-settings-page.web_ico')" 
+                                  :error-messages="errors"
+                                  prepend-icon=""
+                                  @change="FileHandle($event,'web_ico')"
+                                ></v-file-input>
+                              </ValidationProvider>
+                            </v-col>
+                          </v-row>
                           <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.web_name')" rules="required">
                             <v-text-field
                               v-model="settings.GeneralForm.web_name"
@@ -224,6 +243,7 @@
       tab: null,
       settings:{
         GeneralForm:{
+          web_ico:"",
           web_name:"",
           web_email:"",
         },
@@ -275,6 +295,9 @@
         if(typeof(this.settings.MaintenanceForm.maintenance_switch)!=="boolean"){
           this.settings.MaintenanceForm.maintenance_switch   = parseInt(this.settings.MaintenanceForm.maintenance_switch);  
         }
+      },
+      "settings.GeneralForm.web_ico":function(){
+        // this.$refs.web_ico.text[0] = this.settings.GeneralForm.web_ico
       }
     },
     created:function(){
@@ -309,6 +332,17 @@
           }
         })
       },
+      FileHandle(event,name){
+        if(event){
+          let reader = new FileReader();
+          reader.readAsDataURL(event);
+          let tmp = this;
+          reader.onload = function(){
+            tmp.settings.GeneralForm[name] = this.result;
+          }  
+        }
+        
+      }
     }
   }
 </script>

@@ -63,6 +63,7 @@
 	"system-settings-page":{
 		"general-settings":"一般設定",
 		"maintenance-settings":"維護設定",
+		"web_ico":"網站標誌",
 		"web_name":"網站名稱",
 		"web_email":"網站E-mail",
 		"maintenance_switch":"維護開關",
