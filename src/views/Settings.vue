@@ -40,7 +40,7 @@
                           <v-row>
                             <v-col cols=1>
                               <v-img
-                                :src="'http://localhost'+settings.GeneralForm.web_ico"
+                                :src="settings.GeneralForm.web_ico"
                               ></v-img>
                             </v-col>
                             <v-col>
