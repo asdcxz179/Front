@@ -29,6 +29,10 @@
                 >
                   {{$t('system-settings-page.maintenance-settings')}}
                 </v-tab>
+                <v-tab
+                >
+                  {{$t('system-settings-page.personal-settings')}}
+                </v-tab>
               </v-tabs>
               <v-tabs-items v-model="tab">
                 <v-tab-item
@@ -51,7 +55,7 @@
                                   v-bind:label="$t('system-settings-page.web_ico')" 
                                   :error-messages="errors"
                                   prepend-icon=""
-                                  @change="FileHandle($event,'web_ico')"
+                                  @change="FileHandle($event,'GeneralForm','web_ico')"
                                 ></v-file-input>
                               </ValidationProvider>
                             </v-col>
@@ -229,6 +233,46 @@
                     </v-form>
                   </ValidationObserver>
                 </v-tab-item>
+                <v-tab-item
+                >
+                  <ValidationObserver ref="PersonalForm" >
+                    <v-form ref="personal-form" @submit="EditSettings('PersonalForm')">
+                      <v-card>
+                        <v-card-text >
+                          <v-row>
+                            <v-col cols=1>
+                              <v-img
+                                :src="settings.PersonalForm.avatar"
+                              ></v-img>
+                            </v-col>
+                            <v-col>
+                              <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.avatar')" rules="">
+                                <v-file-input
+                                  ref="avatar"
+                                  accept=".png,.jpg"
+                                  v-bind:label="$t('system-settings-page.avatar')" 
+                                  :error-messages="errors"
+                                  prepend-icon=""
+                                  @change="FileHandle($event,'PersonalForm','avatar')"
+                                ></v-file-input>
+                              </ValidationProvider>
+                            </v-col>
+                          </v-row>
+                          <ValidationProvider v-slot="{ errors }" v-bind:name="$t('system-settings-page.personal_name')" rules="required">
+                            <v-text-field
+                              v-model="settings.PersonalForm.personal_name"
+                              v-bind:label="$t('system-settings-page.personal_name')" 
+                              :error-messages="errors"
+                            ></v-text-field>
+                          </ValidationProvider>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-btn color="blue darken-1" text type="submit">{{$t('common.save')}}</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-form>
+                  </ValidationObserver>
+                </v-tab-item>
               </v-tabs-items>
             </v-card-text>
           </v-card>
@@ -251,6 +295,10 @@
           maintenance_switch:false,
           maintenance_start_datetime:"",
           maintenance_end_datetime:"",
+        },
+        PersonalForm:{
+          avatar:"",
+          personal_name:""
         }
       },
       menu_maintenance_start_date:false,
@@ -332,13 +380,13 @@
           }
         })
       },
-      FileHandle(event,name){
+      FileHandle(event,form,name){
         if(event){
           let reader = new FileReader();
           reader.readAsDataURL(event);
           let tmp = this;
           reader.onload = function(){
-            tmp.settings.GeneralForm[name] = this.result;
+            tmp.settings[form][name] = this.result;
           }  
         }
         
