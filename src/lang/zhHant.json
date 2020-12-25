@@ -28,7 +28,16 @@
 		"update":"更新",
 		"are-you-disable":"你確定要禁用?",
 		"are-you-enable":"你確定要啟用?",
-		"save":"儲存"
+		"save":"儲存",
+		"job_company":"工作公司",
+		"job_title":"工作職稱",
+		"job_start_date":"工作開始日期",
+		"job_end_date":"工作結束日期",
+		"job_content":"工作內容",
+		"job_status":"狀態",
+		"enable":"啟用",
+		"disable":"停用",
+		"confirm_delete":"確定要刪除?"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -75,6 +84,13 @@
 		"avatar":"個人頭像",
 		"personal_name":"個人名稱"
 	},
+	"experience-page":{
+		"add-experience":"新增經歷",
+		"experience-list":"經歷列表",
+		"edit-experience":"編輯經歷",
+		"delete-experience":"刪除經歷",
+		"on-job":"在職"
+	},
 	"menu":{
 		"index":"顯示",
 		"show":"查詢",
@@ -89,7 +105,9 @@
 		"manager_group":"管理員群組",
 		"manager_role":"管理員身分",
 		"system_manager":"系統管理組",
-		"disable_manager":"停用管理員"
+		"disable_manager":"停用管理員",
+		"personal_manager":"個人管理",
+		"experience_manager":"經歷管理"
 	},
 	"$vuetify": {
 		"badge":"徽章",

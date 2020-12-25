@@ -45,6 +45,11 @@ Vue.use(VueRouter)
         name: 'ManagerRole',
         component: () => import('../views/ManagerRole.vue')
       },
+      {
+        path: 'Experience',
+        name: 'Experience',
+        component: () => import('../views/Experience.vue')
+      },
     ]
   }
 ]
