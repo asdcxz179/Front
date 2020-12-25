@@ -419,17 +419,6 @@
           job_start_date:"",
           job_end_date:null,
         },
-        headers: [
-          {
-            text: this.$i18n.t('common.no'),
-            align: 'start',
-            sortable: false,
-            value: 'no',
-          },
-          { text: this.$i18n.t('common.name'), value: 'name' },
-          { text: this.$i18n.t('common.created_at'), value: 'created_at' },
-          { text: this.$i18n.t('common.operate'), value: 'id',sortable: false, },
-        ],
       }
     },
     created:function(){
@@ -508,8 +497,7 @@
             });
           }
         }catch(e){
-          e
-          // console.log(e);
+          console.log(e);
         }
       },
     }
