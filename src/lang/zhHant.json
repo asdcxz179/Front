@@ -37,7 +37,10 @@
 		"job_status":"狀態",
 		"enable":"啟用",
 		"disable":"停用",
-		"confirm_delete":"確定要刪除?"
+		"confirm_delete":"確定要刪除?",
+		"home_page":"首頁",
+		"work_page":"作品專區",
+		"contact_page":"聯絡我"
 	},
 	"admin":{
 		"change_password":"變更密碼"
@@ -107,7 +110,8 @@
 		"system_manager":"系統管理組",
 		"disable_manager":"停用管理員",
 		"personal_manager":"個人管理",
-		"experience_manager":"經歷管理"
+		"experience_manager":"經歷管理",
+		"webpage_manager":"頁面管理"
 	},
 	"$vuetify": {
 		"badge":"徽章",

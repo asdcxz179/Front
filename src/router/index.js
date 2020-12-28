@@ -50,6 +50,11 @@ Vue.use(VueRouter)
         name: 'Experience',
         component: () => import('../views/Experience.vue')
       },
+      {
+        path: 'WebPage',
+        name: 'WebPage',
+        component: () => import('../views/WebPage.vue')
+      },
     ]
   }
 ]
