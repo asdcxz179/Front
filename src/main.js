@@ -15,6 +15,7 @@ import { localize } from 'vee-validate';
 import { required, email, max, min, alpha,alpha_num } from 'vee-validate/dist/rules'
 import { extend,ValidationObserver, ValidationProvider } from 'vee-validate'
 
+
 const i18n = new VueI18n();
 
 Vue.use(VueCookies);
@@ -58,7 +59,8 @@ new Vue({
     i18n_trans:{
       'zhHant':'zh_TW',
       'zhHans':'zh_CN'
-    }
+    },
+    tinymce_key:"c8tg740vi4cs0fpjbo68sh5dpbg35j9u33sthxo6ks8kyv0n"
   },
   methods:{
     setLang(lang){

@@ -35,10 +35,12 @@
                 <v-form  @submit="EditWebPage(item.page_title)">
                   <v-card>
                     <v-card-text>
-                      <quill-editor
+                      <editor
+                        :apiKey="$root.tinymce_key"
                         v-model="webs[i].page_content"
-                        :options="editorOption"
-                      />
+                        :init="editorOption"
+                      >
+                      </editor>
                     </v-card-text>
                     <v-divider></v-divider>
                     <v-card-actions>
@@ -59,17 +61,31 @@
   import 'quill/dist/quill.core.css' // import styles
   import 'quill/dist/quill.snow.css' // for snow theme
   import 'quill/dist/quill.bubble.css' // for bubble theme
-  import { quillEditor } from 'vue-quill-editor'
+  import Editor from '@tinymce/tinymce-vue';
 
   export default {
     components: {
-      quillEditor
+      Editor
     },
     data: () => ({
       tab: null,
       webs:[],
       content:"",
-      editorOption:{}
+      editorOption:{
+                      height: 500,
+                      menubar: false,
+                      images_upload_url: 'postAcceptor.php',
+                      plugins: [
+                        'advlist autolink lists link image charmap',
+                        'searchreplace visualblocks code fullscreen',
+                        'print preview anchor insertdatetime media',
+                        'paste code help wordcount table'
+                      ],
+                      toolbar:
+                        'undo redo | formatselect | bold italic | \
+                        alignleft aligncenter alignright | \
+                        bullist numlist outdent indent image | help'
+                    }
     }),
     watch: {
     },
