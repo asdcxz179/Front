@@ -212,12 +212,14 @@
                 <v-row>
                   <v-col cols="12">
                     <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.job_title')" rules="required">
-                      <quill-editor
+                      <editor
+                        :apiKey="$root.tinymce_key"
                         v-model="ExperienceForm.job_content"
-                        :options="editorOption"
+                        :init="$root.editorOption"
+                        ref="tiny"
                         :error-messages="errors"
-                        v-bind:label="$t('common.job_content')" 
-                      />
+                      >
+                      </editor>
                     </ValidationProvider>
                   </v-col>
                 </v-row>
@@ -343,12 +345,14 @@
                 <v-row>
                   <v-col cols="12">
                     <ValidationProvider v-slot="{ errors }" v-bind:name="$t('common.job_title')" rules="required">
-                      <quill-editor
+                      <editor
+                        :apiKey="$root.tinymce_key"
                         v-model="EditForm.job_content"
-                        :options="editorOption"
+                        :init="$root.editorOption"
+                        ref="tiny"
                         :error-messages="errors"
-                        v-bind:label="$t('common.job_content')" 
-                      />
+                      >
+                      </editor>
                     </ValidationProvider>
                   </v-col>
                 </v-row>
@@ -380,15 +384,8 @@
 </template>
 
 <script>
-  import 'quill/dist/quill.core.css' // import styles
-  import 'quill/dist/quill.snow.css' // for snow theme
-  import 'quill/dist/quill.bubble.css' // for bubble theme
-  import { quillEditor } from 'vue-quill-editor'
 
   export default {
-    components: {
-      quillEditor
-    },
     data () {
       return {
         add_dialog:false,
@@ -397,7 +394,6 @@
         add_job_end_date:false,
         edit_job_start_date:false,
         edit_job_end_date:false,
-        editorOption:{},
         panel: [],
         Editid:"",
         job_status_items:[

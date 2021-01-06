@@ -14,6 +14,7 @@ import VueI18n from 'vue-i18n'
 import { localize } from 'vee-validate';
 import { required, email, max, min, alpha,alpha_num } from 'vee-validate/dist/rules'
 import { extend,ValidationObserver, ValidationProvider } from 'vee-validate'
+import Editor from '@tinymce/tinymce-vue';
 
 
 const i18n = new VueI18n();
@@ -40,6 +41,7 @@ Vue.component('v-language',Language);
 Vue.component('v-password',Password);
 Vue.component('ValidationProvider',ValidationProvider);
 Vue.component('ValidationObserver',ValidationObserver);
+Vue.component('Editor',Editor);
 
 extend('required',required);
 extend('email',email);
@@ -55,12 +57,35 @@ new Vue({
   axios,
   i18n,
   render: h => h(App),
-  data:{
-    i18n_trans:{
-      'zhHant':'zh_TW',
-      'zhHans':'zh_CN'
-    },
-    tinymce_key:"c8tg740vi4cs0fpjbo68sh5dpbg35j9u33sthxo6ks8kyv0n"
+  data(){
+    return {
+      i18n_trans:{
+        'zhHant':'zh_TW',
+        'zhHans':'zh_CN'
+      },
+      tinymce_i18n_trans:{
+        'zhHant':'zh_TW',
+        'zhHans':'zh_CN',
+      },
+      tinymce_key:"c8tg740vi4cs0fpjbo68sh5dpbg35j9u33sthxo6ks8kyv0n",
+      editorOption:{
+                      height: 500,
+                      menubar: false,
+                      images_upload_url: 'postAcceptor.php',
+                      plugins: [
+                        'advlist autolink lists link image charmap',
+                        'searchreplace visualblocks code fullscreen',
+                        'print preview anchor insertdatetime media',
+                        'paste code help wordcount table'
+                      ],
+                      toolbar:
+                        'undo redo | formatselect | bold italic | \
+                        alignleft aligncenter alignright | \
+                        bullist numlist outdent indent image | help',
+                      language: "en",
+                    }
+    }
+    
   },
   methods:{
     setLang(lang){
@@ -74,6 +99,7 @@ new Vue({
         this.$common.i18n.setLocaleMessage(this.$store.state.language, msgs.default);
         this.setI18nLanguage();
         this.loadVeeLanguage();
+        this.loadTinyMceLanguage();
         return true;
       });
     },
@@ -85,6 +111,16 @@ new Vue({
       return import(`vee-validate/dist/locale/${lang}.json`).then(msgs => {
         localize(this.$store.state.language,msgs.default);
       })
+    },
+    loadTinyMceLanguage:function(){
+      var lang  = this.tinymce_i18n_trans[this.$store.state.language];
+      if(typeof(this.tinymce_i18n_trans[this.$store.state.language])=='undefined'){
+        lang  = this.$store.state.language;
+      }
+      this.editorOption.language = lang;
+      if(typeof(window.tinymce)!='undefined'){
+        console.log(window.tinymce)
+      }
     },
     setI18nLanguage:function(){
       this.$i18n.locale = this.$store.state.language;

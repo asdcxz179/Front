@@ -38,7 +38,8 @@
                       <editor
                         :apiKey="$root.tinymce_key"
                         v-model="webs[i].page_content"
-                        :init="editorOption"
+                        :init="$root.editorOption"
+                        ref="tiny"
                       >
                       </editor>
                     </v-card-text>
@@ -58,37 +59,12 @@
 </template>
 
 <script>
-  import 'quill/dist/quill.core.css' // import styles
-  import 'quill/dist/quill.snow.css' // for snow theme
-  import 'quill/dist/quill.bubble.css' // for bubble theme
-  import Editor from '@tinymce/tinymce-vue';
-
   export default {
-    components: {
-      Editor
-    },
     data: () => ({
       tab: null,
       webs:[],
-      content:"",
-      editorOption:{
-                      height: 500,
-                      menubar: false,
-                      images_upload_url: 'postAcceptor.php',
-                      plugins: [
-                        'advlist autolink lists link image charmap',
-                        'searchreplace visualblocks code fullscreen',
-                        'print preview anchor insertdatetime media',
-                        'paste code help wordcount table'
-                      ],
-                      toolbar:
-                        'undo redo | formatselect | bold italic | \
-                        alignleft aligncenter alignright | \
-                        bullist numlist outdent indent image | help'
-                    }
+      content:""
     }),
-    watch: {
-    },
     created:function(){
       this.GetWebPage();
     },
