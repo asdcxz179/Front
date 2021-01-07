@@ -71,7 +71,6 @@ new Vue({
       editorOption:{
                       height: 500,
                       menubar: false,
-                      images_upload_url: 'postAcceptor.php',
                       plugins: [
                         'advlist autolink lists link image charmap',
                         'searchreplace visualblocks code fullscreen',
@@ -83,6 +82,27 @@ new Vue({
                         alignleft aligncenter alignright | \
                         bullist numlist outdent indent image | help',
                       language: "en",
+                      file_picker_callback: function (cb) {
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'file');
+                        input.setAttribute('accept', 'image/*');
+                        input.onchange = function () {
+                          var file = this.files[0];
+                          var reader = new FileReader();
+                          reader.onload = function () {
+                            var id = 'blobid' + (new Date()).getTime();
+                            var blobCache =  window.tinymce.activeEditor.editorUpload.blobCache;
+                            var base64 = reader.result.split(',')[1];
+                            var blobInfo = blobCache.create(id, file, base64);
+                            blobCache.add(blobInfo);
+
+                            cb(blobInfo.blobUri(), { title: file.name });
+                          };
+                          reader.readAsDataURL(file);
+                        };
+
+                        input.click();
+                      },
                     }
     }
     

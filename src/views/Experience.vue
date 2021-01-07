@@ -114,7 +114,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="add_dialog" max-width="500px">
+    <v-dialog v-model="add_dialog" >
       <ValidationObserver ref="ExperienceForm" >
         <v-form @submit="AddExperience" ref="add_form">
           <v-card>
@@ -247,7 +247,7 @@
         </v-form>
       </ValidationObserver>
     </v-dialog>
-    <v-dialog v-model="edit_dialog" max-width="500px" :retain-focus="false">
+    <v-dialog v-model="edit_dialog"  :retain-focus="false">
       <ValidationObserver ref="EditForm" >
         <v-form @submit="EditExperience" ref="edit_form">
           <v-card>
